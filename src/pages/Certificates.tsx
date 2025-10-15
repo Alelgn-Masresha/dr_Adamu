@@ -1,0 +1,315 @@
+import { Link } from 'react-router-dom';
+import { ArrowRight, Award, Trophy, Star, Shield, GraduationCap } from 'lucide-react';
+
+const Certificates = () => {
+  const awards = [
+    {
+      title: 'Best Performing Director of the Year',
+      organization: 'Wachemo University',
+      year: '2021',
+      description: 'Recognized for exceptional leadership and outstanding performance as Director of College of Medicine.',
+      category: 'Leadership Excellence'
+    },
+    {
+      title: 'Compassionate and Caring Senior',
+      organization: 'NEMMCS Hospital',
+      year: '2021',
+      description: 'Awarded for demonstrating exceptional compassion and care in patient treatment and medical practice.',
+      category: 'Patient Care Excellence'
+    },
+    {
+      title: 'Presenter Award',
+      organization: 'ESOT Conference',
+      year: '2018',
+      description: 'Recognized for outstanding presentation and contribution to the Ethiopian Society of Orthopedic Surgery.',
+      category: 'Academic Excellence'
+    }
+  ];
+
+  const certifications = [
+    {
+      title: 'COSECSA Certification',
+      organization: 'College of Surgeons of East, Central, and Southern Africa',
+      description: 'Fellow of the College of Surgeons (FCS-ECSA) - Orthopedic Surgery',
+      icon: <Shield className="h-8 w-8" />
+    },
+    {
+      title: 'SIGN Care International',
+      organization: 'Surgical Implant Generation Network',
+      description: 'Certified in orthopedic trauma care and surgical implant techniques',
+      icon: <Award className="h-8 w-8" />
+    },
+    {
+      title: 'CURE Ethiopia Certification',
+      organization: 'CURE International',
+      description: 'Specialized training and certification in pediatric orthopedic care',
+      icon: <Star className="h-8 w-8" />
+    },
+    {
+      title: 'AO Alliance Faculty',
+      organization: 'AO Foundation',
+      description: 'Faculty member for trauma and orthopedic surgery education programs',
+      icon: <GraduationCap className="h-8 w-8" />
+    }
+  ];
+
+  const professionalMemberships = [
+    {
+      name: 'Ethiopian Society of Orthopedic Surgery',
+      role: 'Active Member',
+      description: 'Professional society for orthopedic surgeons in Ethiopia'
+    },
+    {
+      name: 'AO Alliance',
+      role: 'Faculty Member',
+      description: 'International organization for trauma and orthopedic education'
+    },
+    {
+      name: 'College of Surgeons of East, Central, and Southern Africa',
+      role: 'Fellow',
+      description: 'Regional college for surgical education and certification'
+    },
+    {
+      name: 'Wachemo University',
+      role: 'Assistant Professor',
+      description: 'Academic position in medical education and research'
+    }
+  ];
+
+  const recognitionStats = [
+    { number: '15+', label: 'Years of Excellence' },
+    { number: '3', label: 'Major Awards' },
+    { number: '4', label: 'Professional Certifications' },
+    { number: '1000+', label: 'Patients Treated' }
+  ];
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Certificates & Awards</h1>
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+              Recognition and certifications that reflect our commitment to excellence in orthopedic and trauma care
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Recognition Stats */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Recognition Overview
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Numbers that reflect our dedication to excellence and continuous improvement
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {recognitionStats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-2">
+                  {stat.number}
+                </div>
+                <div className="text-lg text-gray-700">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Awards Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Awards & Recognition
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Major awards recognizing excellence in medical practice, leadership, and patient care
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {awards.map((award, index) => (
+              <div key={index} className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div className="text-center mb-6">
+                  <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                    {award.title}
+                  </h3>
+                  <div className="space-y-2 mb-4">
+                    <p className="text-lg font-medium text-blue-600">
+                      {award.organization}
+                    </p>
+                    <p className="text-gray-600">{award.year}</p>
+                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                      {award.category}
+                    </span>
+                  </div>
+                  <p className="text-gray-700">
+                    {award.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Professional Certifications */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Professional Certifications
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Internationally recognized certifications that validate our expertise and commitment to quality care
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {certifications.map((cert, index) => (
+              <div key={index} className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <div className="flex items-start space-x-4">
+                  <div className="text-blue-600 flex-shrink-0">
+                    {cert.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {cert.title}
+                    </h3>
+                    <p className="text-blue-600 font-medium mb-3">
+                      {cert.organization}
+                    </p>
+                    <p className="text-gray-700">
+                      {cert.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Professional Memberships */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Professional Memberships
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Active participation in professional organizations that advance orthopedic care and medical education
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {professionalMemberships.map((membership, index) => (
+              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-blue-100 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
+                    <Award className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                      {membership.name}
+                    </h3>
+                    <p className="text-blue-600 font-medium mb-2">
+                      {membership.role}
+                    </p>
+                    <p className="text-gray-700">
+                      {membership.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Continuous Learning */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Commitment to Continuous Learning
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Our dedication to staying at the forefront of orthopedic and trauma care through ongoing education and certification
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <GraduationCap className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Ongoing Education</h3>
+              <p className="text-gray-700">
+                Regular participation in international conferences, workshops, and training programs
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Quality Standards</h3>
+              <p className="text-gray-700">
+                Maintaining the highest standards of care through continuous certification and assessment
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Star className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Excellence Recognition</h3>
+              <p className="text-gray-700">
+                Consistent recognition for excellence in medical practice, leadership, and patient care
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 bg-blue-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Experience Certified Excellence
+          </h2>
+          <p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
+            Trust in our certified expertise and award-winning care for all your orthopedic and trauma needs.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/contact"
+              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center"
+            >
+              Book Consultation
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+            <Link
+              to="/services"
+              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
+            >
+              View Our Services
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Certificates;
