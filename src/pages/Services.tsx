@@ -98,11 +98,11 @@ const Services = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
+      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 px-2">Our Services</h1>
+            <p className="text-base sm:text-lg lg:text-xl text-blue-100 max-w-3xl mx-auto px-4">
               Comprehensive orthopedic and trauma care services designed to restore your mobility and improve your quality of life
             </p>
           </div>
@@ -110,37 +110,39 @@ const Services = () => {
       </section>
 
       {/* Main Services */}
-      <section className="py-16 bg-white">
+      <section className="py-12 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
               Core Services
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Our primary areas of expertise in orthopedic and trauma care
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
             {mainServices.map((service, index) => (
-              <div key={index} className="bg-gray-50 p-8 rounded-lg">
-                <div className="flex items-start space-x-6">
+              <div key={index} className="bg-gray-50 p-4 sm:p-6 lg:p-8 rounded-lg">
+                <div className="flex items-start space-x-4 sm:space-x-6">
                   <div className="text-blue-600 flex-shrink-0">
-                    {service.icon}
+                    <div className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
+                      {service.icon}
+                    </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">
                       {service.title}
                     </h3>
-                    <p className="text-gray-700 mb-6">
+                    <p className="text-sm sm:text-base text-gray-700 mb-4 sm:mb-6">
                       {service.description}
                     </p>
                     <div className="space-y-2">
-                      <h4 className="font-semibold text-gray-900 mb-3">Services Include:</h4>
+                      <h4 className="font-semibold text-gray-900 mb-2 sm:mb-3 text-sm sm:text-base">Services Include:</h4>
                       {service.features.map((feature, featureIndex) => (
                         <div key={featureIndex} className="flex items-center space-x-2">
-                          <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                          <span className="text-gray-700">{feature}</span>
+                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 flex-shrink-0" />
+                          <span className="text-gray-700 text-sm sm:text-base">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -153,29 +155,31 @@ const Services = () => {
       </section>
 
       {/* Additional Services */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 sm:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
               Additional Services
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Specialized services to meet all your orthopedic and trauma care needs
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {additionalServices.map((service, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                <div className="flex items-start space-x-4">
+              <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div className="flex items-start space-x-3 sm:space-x-4">
                   <div className="text-blue-600 flex-shrink-0">
-                    {service.icon}
+                    <div className="h-6 w-6 sm:h-8 sm:w-8">
+                      {service.icon}
+                    </div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">
                       {service.title}
                     </h3>
-                    <p className="text-gray-700">
+                    <p className="text-sm sm:text-base text-gray-700">
                       {service.description}
                     </p>
                   </div>
@@ -187,27 +191,27 @@ const Services = () => {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-16 bg-white">
+      <section className="py-12 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
               Why Choose Dr. Habtamu Medium Clinic?
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               What sets us apart in providing exceptional orthopedic and trauma care
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {whyChooseUs.map((item, index) => (
               <div key={index} className="text-center">
-                <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="h-8 w-8 text-blue-600" />
+                <div className="bg-blue-100 rounded-full w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <CheckCircle className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">
                   {item.title}
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-sm sm:text-base text-gray-700">
                   {item.description}
                 </p>
               </div>
@@ -217,51 +221,51 @@ const Services = () => {
       </section>
 
       {/* Treatment Process */}
-      <section className="py-16 bg-blue-50">
+      <section className="py-12 sm:py-16 bg-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
               Our Treatment Process
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               A systematic approach to ensure the best possible outcomes for our patients
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             <div className="text-center">
-              <div className="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+              <div className="bg-blue-600 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center mx-auto mb-3 sm:mb-4 text-lg sm:text-xl font-bold">
                 1
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Initial Consultation</h3>
-              <p className="text-gray-700">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">Initial Consultation</h3>
+              <p className="text-sm sm:text-base text-gray-700">
                 Comprehensive evaluation and diagnosis of your condition
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+              <div className="bg-blue-600 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center mx-auto mb-3 sm:mb-4 text-lg sm:text-xl font-bold">
                 2
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Treatment Planning</h3>
-              <p className="text-gray-700">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">Treatment Planning</h3>
+              <p className="text-sm sm:text-base text-gray-700">
                 Customized treatment plan tailored to your specific needs
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+              <div className="bg-blue-600 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center mx-auto mb-3 sm:mb-4 text-lg sm:text-xl font-bold">
                 3
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Treatment Delivery</h3>
-              <p className="text-gray-700">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">Treatment Delivery</h3>
+              <p className="text-sm sm:text-base text-gray-700">
                 Expert surgical or non-surgical treatment with modern techniques
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+              <div className="bg-blue-600 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center mx-auto mb-3 sm:mb-4 text-lg sm:text-xl font-bold">
                 4
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Follow-up Care</h3>
-              <p className="text-gray-700">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">Follow-up Care</h3>
+              <p className="text-sm sm:text-base text-gray-700">
                 Comprehensive rehabilitation and ongoing monitoring
               </p>
             </div>
@@ -270,18 +274,18 @@ const Services = () => {
       </section>
 
       {/* Emergency Services */}
-      <section className="py-16 bg-red-50">
+      <section className="py-12 sm:py-16 bg-red-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-red-600 text-white p-8 rounded-lg text-center">
-            <h2 className="text-3xl font-bold mb-4">Emergency Orthopedic Care</h2>
-            <p className="text-xl mb-6 text-red-100">
+          <div className="bg-red-600 text-white p-4 sm:p-6 lg:p-8 rounded-lg text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Emergency Orthopedic Care</h2>
+            <p className="text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 text-red-100">
               For urgent orthopedic injuries and trauma, we provide immediate emergency care services.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <div className="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <div className="bg-white text-red-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base">
                 Emergency Hotline: +251 912 243 888
               </div>
-              <div className="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold">
+              <div className="bg-white text-red-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base">
                 Available 24/7
               </div>
             </div>
@@ -290,25 +294,25 @@ const Services = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-blue-600 text-white">
+      <section className="py-12 sm:py-16 bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-2">
             Ready to Restore Your Mobility?
           </h2>
-          <p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 text-blue-100 max-w-3xl mx-auto px-4">
             Contact us today to schedule a consultation and learn more about how we can help you regain your quality of life.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
             <Link
               to="/contact"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center"
+              className="bg-white text-blue-600 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center text-sm sm:text-base"
             >
               Book Consultation
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
             </Link>
             <Link
               to="/contact"
-              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
+              className="border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors text-sm sm:text-base"
             >
               Emergency Contact
             </Link>

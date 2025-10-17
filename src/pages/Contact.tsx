@@ -64,11 +64,11 @@ const Contact = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
+      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Contact Us</h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 px-2">Contact Us</h1>
+            <p className="text-base sm:text-lg lg:text-xl text-blue-100 max-w-3xl mx-auto px-4">
               Get in touch with Dr. Habtamu Medium Clinic for consultations, appointments, or emergency care
             </p>
           </div>
@@ -76,28 +76,30 @@ const Contact = () => {
       </section>
 
       {/* Contact Information */}
-      <section className="py-16 bg-white">
+      <section className="py-12 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
               Get In Touch
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               We're here to help you with all your orthopedic and trauma care needs
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16">
             {contactInfo.map((info, index) => (
-              <div key={index} className="text-center bg-gray-50 p-6 rounded-lg">
-                <div className="text-blue-600 mb-4 flex justify-center">
-                  {info.icon}
+              <div key={index} className="text-center bg-gray-50 p-4 sm:p-6 rounded-lg">
+                <div className="text-blue-600 mb-3 sm:mb-4 flex justify-center">
+                  <div className="h-5 w-5 sm:h-6 sm:w-6">
+                    {info.icon}
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">
                   {info.title}
                 </h3>
                 {info.details.map((detail, detailIndex) => (
-                  <p key={detailIndex} className="text-gray-700 mb-1">
+                  <p key={detailIndex} className="text-gray-700 mb-1 text-sm sm:text-base">
                     {detail}
                   </p>
                 ))}
@@ -108,13 +110,13 @@ const Contact = () => {
       </section>
 
       {/* Appointment Booking Form */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 sm:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
             {/* Form */}
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Book an Appointment</h2>
-              <p className="text-gray-600 mb-8">
+            <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-md">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Book an Appointment</h2>
+              <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
                 Fill out the form below and we'll get back to you within 24 hours to confirm your appointment.
               </p>
 
@@ -129,8 +131,8 @@ const Contact = () => {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Full Name *
@@ -138,7 +140,7 @@ const Contact = () => {
                     <input
                       {...register('name', { required: 'Name is required' })}
                       type="text"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                       placeholder="Your full name"
                     />
                     {errors.name && (
@@ -153,7 +155,7 @@ const Contact = () => {
                     <input
                       {...register('phone', { required: 'Phone number is required' })}
                       type="tel"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                       placeholder="+251 XXX XXX XXX"
                     />
                     {errors.phone && (
@@ -175,7 +177,7 @@ const Contact = () => {
                       }
                     })}
                     type="email"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                     placeholder="your.email@example.com"
                   />
                   {errors.email && (
@@ -183,7 +185,7 @@ const Contact = () => {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Preferred Date *
@@ -250,27 +252,27 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center"
+                  className="w-full bg-blue-600 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center text-sm sm:text-base"
                 >
-                  <Send className="h-5 w-5 mr-2" />
+                  <Send className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                   Request Appointment
                 </button>
               </form>
             </div>
 
             {/* Map and Additional Info */}
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               {/* Map Placeholder */}
-              <div className="bg-white p-8 rounded-lg shadow-md">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Find Us</h3>
-                <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center mb-4">
+              <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-md">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Find Us</h3>
+                <div className="bg-gray-200 h-48 sm:h-56 lg:h-64 rounded-lg flex items-center justify-center mb-3 sm:mb-4">
                   <div className="text-center text-gray-500">
-                    <MapPin className="h-12 w-12 mx-auto mb-2" />
-                    <p>Interactive Map</p>
-                    <p className="text-sm">Sechiduna, Hossana, Central Ethiopia</p>
+                    <MapPin className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mx-auto mb-2" />
+                    <p className="text-sm sm:text-base">Interactive Map</p>
+                    <p className="text-xs sm:text-sm">Sechiduna, Hossana, Central Ethiopia</p>
                   </div>
                 </div>
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   Dr. Habtamu Medium Clinic is conveniently located in Sechiduna, Hossana, 
                   Central Ethiopia. We're easily accessible by public transportation and 
                   have parking available for patients.
@@ -278,45 +280,45 @@ const Contact = () => {
               </div>
 
               {/* Emergency Contact */}
-              <div className="bg-red-50 border border-red-200 p-6 rounded-lg">
-                <h3 className="text-xl font-bold text-red-900 mb-4">Emergency Contact</h3>
-                <p className="text-red-800 mb-4">
+              <div className="bg-red-50 border border-red-200 p-4 sm:p-6 rounded-lg">
+                <h3 className="text-lg sm:text-xl font-bold text-red-900 mb-3 sm:mb-4">Emergency Contact</h3>
+                <p className="text-red-800 mb-3 sm:mb-4 text-sm sm:text-base">
                   For urgent orthopedic injuries and trauma, call our emergency hotline:
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center">
-                    <Phone className="h-5 w-5 text-red-600 mr-2" />
-                    <span className="font-semibold text-red-900">+251 912 243 888</span>
+                    <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 mr-2" />
+                    <span className="font-semibold text-red-900 text-sm sm:text-base">+251 912 243 888</span>
                   </div>
                   <div className="flex items-center">
-                    <Phone className="h-5 w-5 text-red-600 mr-2" />
-                    <span className="font-semibold text-red-900">+251 965 571 046</span>
+                    <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 mr-2" />
+                    <span className="font-semibold text-red-900 text-sm sm:text-base">+251 965 571 046</span>
                   </div>
                 </div>
-                <p className="text-red-700 text-sm mt-4">
+                <p className="text-red-700 text-xs sm:text-sm mt-3 sm:mt-4">
                   Available 24/7 for emergency orthopedic care
                 </p>
               </div>
 
               {/* What to Expect */}
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="text-xl font-bold text-blue-900 mb-4">What to Expect</h3>
+              <div className="bg-blue-50 p-4 sm:p-6 rounded-lg">
+                <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-3 sm:mb-4">What to Expect</h3>
                 <ul className="space-y-2 text-blue-800">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Confirmation call within 24 hours</span>
+                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm sm:text-base">Confirmation call within 24 hours</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Comprehensive medical evaluation</span>
+                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm sm:text-base">Comprehensive medical evaluation</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Personalized treatment plan</span>
+                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm sm:text-base">Personalized treatment plan</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Follow-up care and support</span>
+                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm sm:text-base">Follow-up care and support</span>
                   </li>
                 </ul>
               </div>
