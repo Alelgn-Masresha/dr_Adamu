@@ -10,7 +10,6 @@ const Header = () => {
     { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about' },
     { name: 'Services', href: '/services' },
-    { name: 'Trainings', href: '/trainings' },
     { name: 'Presentations', href: '/presentations' },
     { name: 'Certificates', href: '/certificates' },
     { name: 'Contributions', href: '/contributions' },
@@ -24,7 +23,7 @@ const Header = () => {
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
       {/* Top Contact Bar */}
-      <div className="bg-blue-900 text-white py-2">
+      <div className="bg-gray-800 text-white py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center text-sm">
             <div className="flex items-center space-x-4 mb-2 sm:mb-0">
@@ -47,16 +46,14 @@ const Header = () => {
 
       {/* Main Navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-2">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3">
-              <div className="bg-blue-600 text-white rounded-full p-2">
-                <span className="text-xl font-bold">DAMC</span>
+            <Link to="/" className="flex items-center space-x-4">
+              <div className="bg-blue-600 text-white rounded-full p-3 w-16 h-16 flex items-center justify-center">
+                <span className="text-lg font-bold">DAMC</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Dr. Adamu Medium Clinic</h1>
-                <p className="text-sm text-gray-600">Orthopedic & Trauma Care</p>
               </div>
             </Link>
           </div>
@@ -67,26 +64,16 @@ const Header = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
                   isActive(item.href)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
+                    : 'text-gray-700 hover:text-blue-600'
                 }`}
               >
                 {item.name}
               </Link>
             ))}
           </nav>
-
-          {/* Book Appointment Button */}
-          <div className="hidden lg:block">
-            <Link
-              to="/contact"
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              Book Appointment
-            </Link>
-          </div>
 
           {/* Mobile menu button */}
           <div className="lg:hidden">
@@ -117,13 +104,6 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link
-                to="/contact"
-                className="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Book Appointment
-              </Link>
             </div>
           </div>
         )}

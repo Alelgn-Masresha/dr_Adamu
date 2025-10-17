@@ -68,7 +68,7 @@ const Testimonials = () => {
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Patient Testimonials</h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Hear from our patients about their experience at Dr. Adamu Medium Clinic
+              Hear from our patients about their experience at Dr. Habtamu Medium Clinic
             </p>
           </div>
         </div>
@@ -210,7 +210,7 @@ const Testimonials = () => {
             Ready to Experience Our Care?
           </h2>
           <p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
-            Join the hundreds of patients who have trusted Dr. Adamu Medium Clinic with their orthopedic care.
+            Join the hundreds of patients who have trusted Dr. Habtamu Medium Clinic with their orthopedic care.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

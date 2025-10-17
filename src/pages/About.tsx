@@ -48,7 +48,7 @@ const About = () => {
       <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">About Dr. Adamu Medium Clinic</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">About Dr. Habtamu Medium Clinic</h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
               A leading orthopedic and trauma care center dedicated to restoring movement and renewing lives
             </p>
@@ -67,7 +67,7 @@ const About = () => {
               <div className="space-y-4 text-gray-700">
                 <p>
                   Dr. Habtamu Tamrat Derilo is a distinguished orthopedic surgeon with over 15 years of experience 
-                  in providing exceptional orthopedic and trauma care. As the founder and lead surgeon of Dr. Adamu 
+                  in providing exceptional orthopedic and trauma care. As the founder and lead surgeon of Dr. Habtamu 
                   Medium Clinic, he has dedicated his career to advancing orthopedic surgery in Ethiopia and East Africa.
                 </p>
                 <p>
@@ -238,7 +238,7 @@ const About = () => {
                 </div>
                 <div className="border-l-4 border-blue-600 pl-6">
                   <h4 className="font-semibold text-gray-900">Founder & Lead Surgeon</h4>
-                  <p className="text-gray-600">Dr. Adamu Medium Clinic</p>
+                  <p className="text-gray-600">Dr. Habtamu Medium Clinic</p>
                 </div>
               </div>
             </div>

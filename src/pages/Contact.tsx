@@ -69,7 +69,7 @@ const Contact = () => {
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Contact Us</h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Get in touch with Dr. Adamu Medium Clinic for consultations, appointments, or emergency care
+              Get in touch with Dr. Habtamu Medium Clinic for consultations, appointments, or emergency care
             </p>
           </div>
         </div>
@@ -271,7 +271,7 @@ const Contact = () => {
                   </div>
                 </div>
                 <p className="text-gray-600">
-                  Dr. Adamu Medium Clinic is conveniently located in Sechiduna, Hossana, 
+                  Dr. Habtamu Medium Clinic is conveniently located in Sechiduna, Hossana, 
                   Central Ethiopia. We're easily accessible by public transportation and 
                   have parking available for patients.
                 </p>

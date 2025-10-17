@@ -13,7 +13,7 @@ const Footer = () => {
                 <span className="text-xl font-bold">DAMC</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold">Dr. Adamu Medium Clinic</h3>
+                <h3 className="text-xl font-bold">Dr. Habtamu Medium Clinic</h3>
                 <p className="text-gray-400">Orthopedic & Trauma Care</p>
               </div>
             </div>
@@ -96,7 +96,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2025 Dr. Adamu Medium Clinic. All rights reserved.
+              © 2025 Dr. Habtamu Medium Clinic. All rights reserved.
             </p>
             <p className="text-gray-400 text-sm mt-2 md:mt-0">
               Powered by Modern Web Technologies
