@@ -576,6 +576,14 @@ const Home = () => {
               </div>
             ))}
           </div>
+          <div className="text-center mt-6 sm:mt-8">
+            <Link
+              to="/experience"
+              className="inline-block bg-white text-blue-900 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base"
+            >
+              Details
+            </Link>
+          </div>
         </div>
       </section>
        {/* Our Physicians Section */}
