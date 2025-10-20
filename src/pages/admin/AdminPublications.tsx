@@ -37,7 +37,8 @@ const AdminPublications = () => {
     year: '',
     doi: '',
     url: '',
-    abstract: ''
+    abstract: '',
+    topics: [] as string[]
   });
 
   // Load publications on component mount
@@ -75,7 +76,7 @@ const AdminPublications = () => {
         setPublications([...publications, newPublication]);
       }
       setIsModalOpen(false);
-      setFormData({ title: '', authors: '', journal: '', year: '', doi: '', url: '', abstract: '' });
+      setFormData({ title: '', authors: '', journal: '', year: '', doi: '', url: '', abstract: '', topics: [] });
       setError(null);
     } catch (err) {
       setError(editingPublication ? 'Failed to update publication' : 'Failed to create publication');
@@ -100,6 +101,26 @@ const AdminPublications = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const [newTopic, setNewTopic] = useState('');
+
+  const addTopic = () => {
+    if (newTopic.trim() && !formData.topics.includes(newTopic.trim())) {
+      setFormData({ ...formData, topics: [...formData.topics, newTopic.trim()] });
+      setNewTopic('');
+    }
+  };
+
+  const removeTopic = (topicToRemove: string) => {
+    setFormData({ ...formData, topics: formData.topics.filter(topic => topic !== topicToRemove) });
+  };
+
+  const handleTopicKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addTopic();
+    }
+  };
+
   const handleEdit = (publication: any) => {
     setEditingPublication(publication);
     setFormData({
@@ -109,7 +130,8 @@ const AdminPublications = () => {
       year: publication.year.toString(),
       doi: publication.doi,
       url: publication.url,
-      abstract: publication.abstract
+      abstract: publication.abstract,
+      topics: publication.topics || []
     });
     setIsModalOpen(true);
   };
@@ -117,7 +139,7 @@ const AdminPublications = () => {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setEditingPublication(null);
-    setFormData({ title: '', authors: '', journal: '', year: '', doi: '', url: '', abstract: '' });
+    setFormData({ title: '', authors: '', journal: '', year: '', doi: '', url: '', abstract: '', topics: [] });
   };
 
   return (
@@ -127,7 +149,7 @@ const AdminPublications = () => {
         <button 
           onClick={() => {
             setEditingPublication(null);
-            setFormData({ title: '', authors: '', journal: '', year: '', doi: '', url: '', abstract: '' });
+            setFormData({ title: '', authors: '', journal: '', year: '', doi: '', url: '', abstract: '', topics: [] });
             setIsModalOpen(true);
           }}
           className="bg-black text-white px-4 py-2 rounded-md text-sm"
@@ -167,7 +189,7 @@ const AdminPublications = () => {
                 <div className="col-span-2 text-gray-600">{pub.doi}</div>
                 <div className="col-span-1 text-right">
                   <button 
-                    onClick={() => handleEdit(publication)}
+                    onClick={() => handleEdit(pub)}
                     className="text-blue-600 hover:text-blue-800 mr-2"
                   >
                     Edit
@@ -266,6 +288,45 @@ const AdminPublications = () => {
               className="w-full border rounded-md px-3 py-2"
               placeholder="Publication abstract..."
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Topics</label>
+            <div className="flex gap-2 mb-2">
+              <input
+                type="text"
+                value={newTopic}
+                onChange={(e) => setNewTopic(e.target.value)}
+                onKeyPress={handleTopicKeyPress}
+                placeholder="Add a topic..."
+                className="flex-1 border rounded-md px-3 py-2"
+              />
+              <button
+                type="button"
+                onClick={addTopic}
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+              >
+                Add
+              </button>
+            </div>
+            {formData.topics.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {formData.topics.map((topic, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
+                  >
+                    {topic}
+                    <button
+                      type="button"
+                      onClick={() => removeTopic(topic)}
+                      className="ml-2 text-blue-600 hover:text-blue-800"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
           <div className="flex justify-end space-x-3 pt-4">
             <button

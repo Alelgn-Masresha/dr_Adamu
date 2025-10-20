@@ -1,63 +1,48 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, FileText, Calendar, Users, Download } from 'lucide-react';
+import { BookOpen, FileText, Calendar, Users } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+interface Publication {
+  id: string;
+  title: string;
+  authors: string;
+  journal: string;
+  year: number;
+  doi: string;
+  url: string;
+  abstract: string;
+  topics: string[];
+  created_at: string;
+  updated_at: string;
+}
 
 const Publications = () => {
-  const publications = [
-    {
-      title: 'Orthopedic Trauma Management in Resource-Limited Settings: A Comprehensive Review',
-      authors: 'Habtamu Tamrat Derilo, et al.',
-      journal: 'International Journal of Orthopedic Trauma',
-      year: '2023',
-      description: 'A comprehensive review of orthopedic trauma management strategies adapted for resource-limited healthcare settings in East Africa.',
-      topics: ['Orthopedic Trauma', 'Resource Management', 'Healthcare Systems'],
-      doi: '10.1016/j.ijot.2023.001234'
-    },
-    {
-      title: 'COVID-19 Impact on Orthopedic Surgery Outcomes: A Retrospective Study',
-      authors: 'Habtamu Tamrat Derilo, et al.',
-      journal: 'Journal of Orthopedic Surgery and Research',
-      year: '2022',
-      description: 'Analysis of orthopedic surgery outcomes during the COVID-19 pandemic and strategies for maintaining quality care.',
-      topics: ['COVID-19', 'Surgical Outcomes', 'Pandemic Response'],
-      doi: '10.1186/s13018-022-03345-6'
-    },
-    {
-      title: 'Anemia Management in Orthopedic Trauma Patients: Clinical Guidelines',
-      authors: 'Habtamu Tamrat Derilo, et al.',
-      journal: 'African Journal of Orthopedic Surgery',
-      year: '2023',
-      description: 'Clinical guidelines for managing anemia in orthopedic trauma patients, with focus on pre-operative optimization.',
-      topics: ['Anemia Management', 'Clinical Guidelines', 'Pre-operative Care'],
-      doi: '10.4314/ajos.v15i2.123'
-    },
-    {
-      title: 'Surgical Safety Protocols in Orthopedic Procedures: Implementation and Outcomes',
-      authors: 'Habtamu Tamrat Derilo, et al.',
-      journal: 'World Journal of Orthopedics',
-      year: '2022',
-      description: 'Implementation of surgical safety protocols in orthopedic procedures and their impact on patient outcomes.',
-      topics: ['Surgical Safety', 'Quality Improvement', 'Patient Outcomes'],
-      doi: '10.5312/wjo.v13.i8.456'
-    },
-    {
-      title: 'Pediatric Orthopedic Care in Rural Settings: Challenges and Solutions',
-      authors: 'Habtamu Tamrat Derilo, et al.',
-      journal: 'Pediatric Orthopedic Journal',
-      year: '2023',
-      description: 'Addressing the challenges of providing pediatric orthopedic care in rural and underserved areas.',
-      topics: ['Pediatric Orthopedics', 'Rural Healthcare', 'Healthcare Access'],
-      doi: '10.1097/BPO.0000000000001234'
-    },
-    {
-      title: 'Rehabilitation Protocols for Lower Limb Trauma: Evidence-Based Approach',
-      authors: 'Habtamu Tamrat Derilo, et al.',
-      journal: 'Physical Therapy in Orthopedics',
-      year: '2022',
-      description: 'Evidence-based rehabilitation protocols for patients recovering from lower limb traumatic injuries.',
-      topics: ['Rehabilitation', 'Lower Limb Trauma', 'Evidence-Based Practice'],
-      doi: '10.1093/pto/ptz123'
-    }
-  ];
+  const [publications, setPublications] = useState<Publication[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch publications from API
+  useEffect(() => {
+    const fetchPublications = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/publications');
+        if (response.ok) {
+          const data = await response.json();
+          setPublications(data);
+        } else {
+          console.error('Failed to fetch publications');
+          setError('Failed to load publications');
+        }
+      } catch (error) {
+        console.error('Error fetching publications:', error);
+        setError('Failed to load publications');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPublications();
+  }, []);
 
   const researchAreas = [
     {
@@ -155,53 +140,82 @@ const Publications = () => {
           </div>
 
           <div className="space-y-8">
-            {publications.map((pub, index) => (
-              <div key={index} className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
-                  <div className="flex-1">
-                    <div className="flex items-center mb-4">
-                      <FileText className="h-8 w-8 text-blue-600 mr-3" />
-                      <h3 className="text-2xl font-semibold text-gray-900">
-                        {pub.title}
-                      </h3>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-4 mb-4 text-gray-600">
-                      <div className="flex items-center">
-                        <Users className="h-5 w-5 mr-2" />
-                        <span className="text-sm">{pub.authors}</span>
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="text-gray-500">Loading publications...</div>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <div className="text-red-500">{error}</div>
+              </div>
+            ) : publications.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-gray-500">No publications available at the moment.</div>
+              </div>
+            ) : (
+              publications.map((pub) => (
+                <div key={pub.id} className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
+                    <div className="flex-1">
+                      <div className="flex items-center mb-4">
+                        <FileText className="h-8 w-8 text-blue-600 mr-3" />
+                        <h3 className="text-2xl font-semibold text-gray-900">
+                          {pub.title}
+                        </h3>
                       </div>
-                      <div className="flex items-center">
-                        <BookOpen className="h-5 w-5 mr-2" />
-                        <span className="text-sm">{pub.journal}</span>
+                      <div className="flex flex-wrap items-center gap-4 mb-4 text-gray-600">
+                        <div className="flex items-center">
+                          <Users className="h-5 w-5 mr-2" />
+                          <span className="text-sm">{pub.authors}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <BookOpen className="h-5 w-5 mr-2" />
+                          <span className="text-sm">{pub.journal}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Calendar className="h-5 w-5 mr-2" />
+                          <span className="text-sm">{pub.year}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center">
-                        <Calendar className="h-5 w-5 mr-2" />
-                        <span className="text-sm">{pub.year}</span>
-                      </div>
+                      <p className="text-gray-700 mb-4">
+                        {pub.abstract}
+                      </p>
+                      {pub.topics && pub.topics.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {pub.topics.map((topic, topicIndex) => (
+                            <span key={topicIndex} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                              {topic}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {pub.doi && (
+                        <p className="text-sm text-gray-600 mb-2">
+                          <strong>DOI:</strong> {pub.doi}
+                        </p>
+                      )}
+                      
                     </div>
-                    <p className="text-gray-700 mb-4">
-                      {pub.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {pub.topics.map((topic, topicIndex) => (
-                        <span key={topicIndex} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                          {topic}
-                        </span>
-                      ))}
+                    <div className="mt-4 lg:mt-0 lg:ml-6">
+                      {pub.url ? (
+                        <a 
+                          href={pub.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+                        >
+                          View Publication
+                        </a>
+                      ) : (
+                        <button className="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed flex items-center">
+                          View Publication
+                        </button>
+                      )}
                     </div>
-                    <p className="text-sm text-gray-600">
-                      <strong>DOI:</strong> {pub.doi}
-                    </p>
-                  </div>
-                  <div className="mt-4 lg:mt-0 lg:ml-6">
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
-                      <Download className="h-4 w-4 mr-2" />
-                      Download
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>

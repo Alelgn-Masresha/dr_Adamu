@@ -109,6 +109,7 @@ create table if not exists public.publications (
   doi text,
   url text,
   abstract text,
+  topics text[],                              -- array of topic tags
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

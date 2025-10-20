@@ -42,37 +42,39 @@ const Home = () => {
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
   const [experiences, setExperiences] = useState<any[]>([]);
   const [physicians, setPhysicians] = useState<PhysicianItem[]>([]);
+  const [galleryItems, setGalleryItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [testimonialsLoading, setTestimonialsLoading] = useState(true);
   const [experiencesLoading, setExperiencesLoading] = useState(true);
   const [physiciansLoading, setPhysiciansLoading] = useState(true);
+  const [galleryLoading, setGalleryLoading] = useState(true);
   
   const heroSlides = [
     {
       id: 1,
       image: '/src/img/hero/6015007097554586193.jpg',
-      title: 'We Care About Your Health',
-      subtitle: 'Excellence',
+      title: 'We Care About Your',
+      subtitle: 'Health',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     },
     {
       id: 2,
       image: '/src/img/hero/6015007097554586191.jpg',
-      title: 'We Care About Your Health',
+      title: 'Empathy Meets',
       subtitle: 'Expertise',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     },
     {
       id: 3,
       image: '/src/img/hero/6015007097554586187.jpg',
-      title: 'We Care About Your Health',
-      subtitle: 'Innovation',
+      title: 'Excellence in Every Step of ',
+      subtitle: 'Care',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     },
     {
       id: 4,
       image: '/src/img/hero/6014611982038191001.jpg',
-      title: 'We Care About Your Health',
+      title: 'Compassionate Care, Trusted Professionals',
       subtitle: 'Excellence',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     }
@@ -317,28 +319,31 @@ const Home = () => {
     fetchPhysicians();
   }, []);
 
+  // Fetch gallery items from API
+  useEffect(() => {
+    const fetchGalleryItems = async () => {
+      try {
+        setGalleryLoading(true);
+        const response = await fetch('http://localhost:5000/api/gallery');
+        if (response.ok) {
+          const data = await response.json();
+          // Filter only image files
+          const imageItems = data.filter((item: any) => item.content_type?.startsWith('image/'));
+          setGalleryItems(imageItems);
+        } else {
+          console.error('Failed to fetch gallery items');
+          setGalleryItems([]);
+        }
+      } catch (error) {
+        console.error('Error fetching gallery items:', error);
+        setGalleryItems([]);
+      } finally {
+        setGalleryLoading(false);
+      }
+    };
+    fetchGalleryItems();
+  }, []);
 
-  // Gallery images from all img folders
-  const galleryImages = [
-    { id: 1, src: '/src/img/news/5884433855463668554.jpg', alt: 'CPD Training Session' },
-    { id: 2, src: '/src/img/news/6012332002944077716.jpg', alt: 'Medical Conference' },
-    { id: 3, src: '/src/img/news/6012332002944077703.jpg', alt: 'Trauma Center' },
-    { id: 4, src: '/src/img/news/6015007097554586231.jpg', alt: 'Surgical Procedure' },
-    { id: 5, src: '/src/img/news/6015007097554586227.jpg', alt: 'Medical Research' },
-    { id: 6, src: '/src/img/news/6015007097554586226.jpg', alt: 'Community Health' },
-    { id: 7, src: '/src/img/news/6015007097554586216.jpg', alt: 'Medical Innovation' },
-    { id: 8, src: '/src/img/doctor/5929338507342494306.jpg', alt: 'Medical Professional' },
-    { id: 9, src: '/src/img/doctor/5929338507342494312.jpg', alt: 'Doctor Portrait' },
-    { id: 10, src: '/src/img/doctor/dr_best.jpg', alt: 'Dr. Habtamu' },
-    { id: 11, src: '/src/img/doctor/6015007097554586213.jpg', alt: 'Medical Team' },
-    { id: 12, src: '/src/img/doctor/6015007097554586214.jpg', alt: 'Healthcare Staff' },
-    { id: 13, src: '/src/img/doctor/6015007097554586229.jpg', alt: 'Medical Consultation' },
-    { id: 14, src: '/src/img/doctor/6015007097554586230.jpg', alt: 'Clinical Setting' },
-    { id: 15, src: '/src/img/hero/6015007097554586193.jpg', alt: 'Hospital Facility' },
-    { id: 16, src: '/src/img/hero/6015007097554586191.jpg', alt: 'Medical Equipment' },
-    { id: 17, src: '/src/img/hero/6015007097554586187.jpg', alt: 'Healthcare Environment' },
-    { id: 18, src: '/src/img/hero/6014611982038191001.jpg', alt: 'Medical Center' }
-  ];
 
   // Carousel scroll logic
   const physiciansRef = useRef<HTMLDivElement | null>(null);
@@ -737,20 +742,20 @@ const Home = () => {
                  physicians.map((doc) => (
                    <div key={doc.id} className="snap-start flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px] lg:w-[380px]">
                      <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-[420px] sm:h-[450px] md:h-[480px] flex flex-col">
-                       {/* Image section - 60% of card height */}
-                       <div className="h-[252px] sm:h-[270px] md:h-[288px] relative overflow-hidden rounded-t-2xl">
-                         {doc.avatar_file ? (
-                           <img 
-                             src={`http://localhost:5000/uploads/${doc.avatar_file}`} 
-                             alt={doc.full_name} 
-                             className="w-full h-full object-cover rounded-t-2xl" 
-                           />
-                         ) : (
-                           <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm sm:text-base lg:text-lg bg-gray-100 rounded-t-2xl">
-                             No Photo
-                           </div>
-                         )}
-                       </div>
+                      {/* Image section - circular avatar */}
+                      <div className="h-[252px] sm:h-[270px] md:h-[288px] relative flex items-center justify-center">
+                        {doc.avatar_file ? (
+                          <img 
+                            src={`http://localhost:5000/uploads/${doc.avatar_file}`} 
+                            alt={doc.full_name} 
+                            className="w-40 h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 object-cover rounded-full border-4 border-gray" 
+                          />
+                        ) : (
+                          <div className="w-40 h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 flex items-center justify-center text-gray-400 text-sm sm:text-base lg:text-lg bg-gray-100 rounded-full">
+                            No Photo
+                          </div>
+                        )}
+                      </div>
                        
                        {/* Content section - 40% of card height */}
                        <div className="flex-1 px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-6 text-center flex flex-col justify-between">
@@ -887,17 +892,49 @@ const Home = () => {
                className="flex gap-3 sm:gap-4 lg:gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth px-1 pb-2"
                style={{ scrollbarWidth: 'none' } as React.CSSProperties}
              >
-               {galleryImages.map((image) => (
-                 <div key={image.id} className="snap-start flex-shrink-0">
-                   <div className="w-[240px] sm:w-[280px] md:w-[300px] lg:w-[320px] h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-                     <img 
-                       src={image.src} 
-                       alt={image.alt} 
-                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" 
-                     />
+               {galleryLoading ? (
+                 // Show loading state
+                 Array.from({ length: 3 }).map((_, index) => (
+                   <div key={index} className="snap-start flex-shrink-0">
+                     <div className="w-[240px] sm:w-[280px] md:w-[300px] lg:w-[320px] h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] rounded-lg overflow-hidden shadow-md bg-gray-200 flex items-center justify-center">
+                       <div className="text-gray-400">Loading...</div>
+                     </div>
                    </div>
+                 ))
+               ) : galleryItems.length === 0 ? (
+                 // Show empty state
+                 <div className="snap-start flex-shrink-0 w-full text-center py-12">
+                   <div className="text-gray-500">No gallery images available at the moment.</div>
                  </div>
-               ))}
+               ) : (
+                 // Show gallery images
+                 galleryItems.map((item) => (
+                   <div key={item.id} className="snap-start flex-shrink-0">
+                     <div className="w-[240px] sm:w-[280px] md:w-[300px] lg:w-[320px] h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+                       <img 
+                         src={`http://localhost:5000/uploads/${item.file_path}`} 
+                         alt={item.title} 
+                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" 
+                         onError={(e) => {
+                           const target = e.target as HTMLImageElement;
+                           target.style.display = 'none';
+                           const parent = target.parentElement;
+                           if (parent) {
+                             parent.innerHTML = `
+                               <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
+                                 <div class="text-center">
+                                   <div class="text-2xl mb-2">📁</div>
+                                   <div>Image not found</div>
+                                 </div>
+                               </div>
+                             `;
+                           }
+                         }}
+                       />
+                     </div>
+                   </div>
+                 ))
+               )}
              </div>
 
              {/* Right Chevron - Hidden on mobile */}

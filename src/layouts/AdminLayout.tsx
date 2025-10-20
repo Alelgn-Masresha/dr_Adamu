@@ -7,7 +7,6 @@ const AdminLayout = () => {
 
   const navItems = [
     { name: 'Publications', to: '/admin/publications', icon: BookOpenText },
-    { name: 'Services', to: '/admin/services', icon: LayoutGrid },
     { name: 'Experiences', to: '/admin/experiences', icon: Briefcase },
     { name: 'Physicians', to: '/admin/physicians', icon: Users },
     { name: 'News', to: '/admin/news', icon: Newspaper },

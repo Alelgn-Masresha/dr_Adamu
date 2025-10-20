@@ -38,13 +38,13 @@ router.get('/:id', async (req, res) => {
 // POST new publication
 router.post('/', async (req, res) => {
   try {
-    const { title, authors, journal, year, doi, url, abstract } = req.body;
+    const { title, authors, journal, year, doi, url, abstract, topics } = req.body;
     
     const result = await query(
-      `INSERT INTO public.publications (title, authors, journal, year, doi, url, abstract)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO public.publications (title, authors, journal, year, doi, url, abstract, topics)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-      [title, authors, journal, year, doi, url, abstract]
+      [title, authors, journal, year, doi, url, abstract, topics]
     );
     
     res.status(201).json(result.rows[0]);
@@ -58,14 +58,14 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, authors, journal, year, doi, url, abstract } = req.body;
+    const { title, authors, journal, year, doi, url, abstract, topics } = req.body;
     
     const result = await query(
       `UPDATE public.publications 
-       SET title = $1, authors = $2, journal = $3, year = $4, doi = $5, url = $6, abstract = $7, updated_at = NOW()
-       WHERE id = $8
+       SET title = $1, authors = $2, journal = $3, year = $4, doi = $5, url = $6, abstract = $7, topics = $8, updated_at = NOW()
+       WHERE id = $9
        RETURNING *`,
-      [title, authors, journal, year, doi, url, abstract, id]
+      [title, authors, journal, year, doi, url, abstract, topics, id]
     );
     
     if (result.rows.length === 0) {

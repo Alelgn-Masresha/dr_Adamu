@@ -3,7 +3,6 @@ import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminPublications from './pages/admin/AdminPublications';
-import AdminServices from './pages/admin/AdminServices';
 import AdminExperiences from './pages/admin/AdminExperiences';
 import AdminPhysicians from './pages/admin/AdminPhysicians';
 import AdminNews from './pages/admin/AdminNews';
@@ -44,7 +43,6 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="publications" element={<AdminPublications />} />
-          <Route path="services" element={<AdminServices />} />
           <Route path="experiences" element={<AdminExperiences />} />
           <Route path="physicians" element={<AdminPhysicians />} />
           <Route path="news" element={<AdminNews />} />

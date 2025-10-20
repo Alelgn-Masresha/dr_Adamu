@@ -90,9 +90,7 @@ const AdminGallery = () => {
           Upload Media
         </button>
       </div>
-      <div className="bg-white border rounded-lg p-6 mb-4">
-        <div className="border-2 border-dashed rounded-md p-8 text-center text-gray-500">Drag & drop media here</div>
-      </div>
+      
       <div className="flex items-center gap-3 mb-4">
         <select className="border rounded-md px-3 py-2"><option>Grid View</option></select>
         <select className="border rounded-md px-3 py-2"><option>All Types</option></select>

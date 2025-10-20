@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Award, Trophy, Star, Shield, GraduationCap } from 'lucide-react';
+import { ArrowRight, Award, Trophy, Star, Shield, GraduationCap, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const Certificates = () => {
   const awards = [
@@ -80,8 +81,28 @@ const Certificates = () => {
     { number: '15+', label: 'Years of Excellence' },
     { number: '3', label: 'Major Awards' },
     { number: '4', label: 'Professional Certifications' },
-    { number: '1000+', label: 'Patients Treated' }
+    { number: '30000+', label: 'Patients Treated' }
   ];
+
+  // Certificates image slider
+  const certificateImages = [
+    '/src/img/certificates/6012332002944077734.jpg',
+    '/src/img/certificates/6012332002944077735.jpg',
+    '/src/img/certificates/6012332002944077736.jpg',
+    '/src/img/certificates/6012332002944077737.jpg',
+  ];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % certificateImages.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [certificateImages.length]);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % certificateImages.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + certificateImages.length) % certificateImages.length);
 
   return (
     <div className="min-h-screen">
@@ -151,7 +172,7 @@ const Certificates = () => {
         </div>
       </section>
 
-      {/* Professional Certifications */}
+      {/* Professional Certifications - replaced with image slider */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -163,27 +184,45 @@ const Certificates = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {certifications.map((cert, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <div className="flex items-start space-x-4">
-                  <div className="text-blue-600 flex-shrink-0">
-                    {cert.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {cert.title}
-                    </h3>
-                    <p className="text-blue-600 font-medium mb-3">
-                      {cert.organization}
-                    </p>
-                    <p className="text-gray-700">
-                      {cert.description}
-                    </p>
-                  </div>
-                </div>
+          <div className="relative">
+            <div className="overflow-hidden rounded-xl shadow">
+              <div className="relative h-[340px] sm:h-[420px] bg-gray-100">
+                {certificateImages.map((src, index) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt={`Certificate ${index + 1}`}
+                    className={`absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-500 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                  />)
+                )}
               </div>
-            ))}
+            </div>
+
+            <button
+              onClick={prevSlide}
+              className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 p-2 rounded-full shadow"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 p-2 rounded-full shadow"
+              aria-label="Next"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+
+            <div className="flex justify-center mt-4 space-x-2">
+              {certificateImages.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  className={`w-2.5 h-2.5 rounded-full ${idx === currentSlide ? 'bg-blue-600' : 'bg-gray-300'}`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
