@@ -1,48 +1,51 @@
 import { ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-type Institution = {
-  name: string;
+interface ExperienceItem {
+  id: string;
+  institution: string;
   role: string;
   period: string;
-  metrics: { label: string; value: string }[];
-};
+  metrics: {
+    successfulSurgeries: string;
+    years: string;
+    patients: string;
+    successRate: string;
+  };
+  sort_order: number;
+  created_at: string;
+}
 
 const Experience = () => {
-  const institutions: Institution[] = [
-    {
-      name: 'Hossana General Hospital',
-      role: 'Orthopedic Surgeon',
-      period: '2014 – 2018',
-      metrics: [
-        { label: 'Successful Surgeries', value: '500+' },
-        { label: 'Years Experience', value: '5+' },
-        { label: 'Patients Treated', value: '1000+' },
-        { label: 'Success Rate', value: '98%' },
-      ],
-    },
-    {
-      name: 'Wachemo University Teaching Hospital',
-      role: 'Assistant Professor, Orthopedics',
-      period: '2018 – 2022',
-      metrics: [
-        { label: 'Successful Surgeries', value: '700+' },
-        { label: 'Years Experience', value: '4+' },
-        { label: 'Patients Treated', value: '1500+' },
-        { label: 'Success Rate', value: '97%' },
-      ],
-    },
-    {
-      name: 'Dr. Habtamu Medium Clinic',
-      role: 'Medical Director, Orthopedic Surgeon',
-      period: '2022 – Present',
-      metrics: [
-        { label: 'Successful Surgeries', value: '300+' },
-        { label: 'Years Experience', value: '3+' },
-        { label: 'Patients Treated', value: '800+' },
-        { label: 'Success Rate', value: '99%' },
-      ],
-    },
-  ];
+  const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch experiences from API
+  useEffect(() => {
+    const fetchExperiences = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/experiences');
+        if (response.ok) {
+          const data = await response.json();
+          // Sort by sort_order
+          const sortedExperiences = data.sort((a: ExperienceItem, b: ExperienceItem) => a.sort_order - b.sort_order);
+          setExperiences(sortedExperiences);
+          setError(null);
+        } else {
+          console.error('Failed to fetch experiences');
+          setError('Failed to load experience data');
+        }
+      } catch (error) {
+        console.error('Error fetching experiences:', error);
+        setError('Failed to load experience data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExperiences();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -57,32 +60,56 @@ const Experience = () => {
       {/* Institutions */}
       <section className="py-12 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          {institutions.map((inst) => (
-            <div key={inst.name} className="rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-              <div className="bg-gray-50 px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">{inst.name}</h2>
-                  <div className="text-gray-600 text-sm sm:text-base">{inst.role} • {inst.period}</div>
-                </div>
-                <div className="mt-3 sm:mt-0">
-                  <a href="#" className="inline-flex items-center text-blue-600 hover:text-blue-700 text-sm sm:text-base">
-                    Learn more
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-              <div className="bg-blue-900 text-white">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 px-6 sm:px-8 py-8">
-                  {inst.metrics.map((m) => (
-                    <div key={m.label} className="text-center">
-                      <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-200 mb-1">{m.value}</div>
-                      <div className="text-sm sm:text-base text-blue-100">{m.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="text-gray-600">Loading experience data...</div>
             </div>
-          ))}
+          ) : error ? (
+            <div className="text-center py-12">
+              <div className="text-red-600">{error}</div>
+            </div>
+          ) : experiences.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-gray-600">No experience data available at the moment.</div>
+            </div>
+          ) : (
+            experiences.map((experience) => (
+              <div key={experience.id} className="rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+                <div className="bg-gray-50 px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">{experience.institution}</h2>
+                    <div className="text-gray-600 text-sm sm:text-base">{experience.role} • {experience.period}</div>
+                  </div>
+                  <div className="mt-3 sm:mt-0">
+                    <a href="#" className="inline-flex items-center text-blue-600 hover:text-blue-700 text-sm sm:text-base">
+                      Learn more
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
+                <div className="bg-blue-900 text-white">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 px-6 sm:px-8 py-8">
+                    <div className="text-center">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-200 mb-1">{experience.metrics.successfulSurgeries}</div>
+                      <div className="text-sm sm:text-base text-blue-100">Successful Surgeries</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-200 mb-1">{experience.metrics.years}</div>
+                      <div className="text-sm sm:text-base text-blue-100">Years Experience</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-200 mb-1">{experience.metrics.patients}</div>
+                      <div className="text-sm sm:text-base text-blue-100">Patients Treated</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-200 mb-1">{experience.metrics.successRate}</div>
+                      <div className="text-sm sm:text-base text-blue-100">Success Rate</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </section>
     </div>

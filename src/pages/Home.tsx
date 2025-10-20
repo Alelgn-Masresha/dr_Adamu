@@ -2,8 +2,50 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Users, Award, Heart, Stethoscope, Clock, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
+interface NewsItem {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+}
+
+interface TestimonialItem {
+  id: string;
+  author_name: string;
+  author_title?: string;
+  rating: number;
+  content: string;
+  video_link?: string;
+  is_approved: boolean;
+  created_at: string;
+}
+
+interface PhysicianItem {
+  id: string;
+  full_name: string;
+  title?: string;
+  bio?: string;
+  avatar_file?: string;
+  qualifications?: string[];
+  affiliations?: string[];
+  email?: string;
+  phone?: string;
+  location?: string;
+  is_active: boolean;
+  created_at: string;
+}
+
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
+  const [experiences, setExperiences] = useState<any[]>([]);
+  const [physicians, setPhysicians] = useState<PhysicianItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [testimonialsLoading, setTestimonialsLoading] = useState(true);
+  const [experiencesLoading, setExperiencesLoading] = useState(true);
+  const [physiciansLoading, setPhysiciansLoading] = useState(true);
   
   const heroSlides = [
     {
@@ -77,6 +119,42 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [heroSlides.length]);
 
+  // Fetch news data from API
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/news/published');
+        if (response.ok) {
+          const data = await response.json();
+          // Transform the data to match the expected format
+          const transformedNews = data.map((news: any) => ({
+            id: news.id,
+            title: news.title,
+            description: news.excerpt || news.content?.substring(0, 150) + '...' || 'No description available',
+            image: news.cover_image_file ? `http://localhost:5000/uploads/${news.cover_image_file}` : '/src/img/news/default.jpg',
+            date: news.created_at ? new Date(news.created_at).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            }) : 'No date'
+          }));
+          setNewsItems(transformedNews);
+        } else {
+          console.error('Failed to fetch news');
+          // Fallback to empty array or default news
+          setNewsItems([]);
+        }
+      } catch (error) {
+        console.error('Error fetching news:', error);
+        setNewsItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
   };
@@ -108,124 +186,137 @@ const Home = () => {
     }
   ];
 
-  const stats = [
-    { number: '500+', label: 'Successful Surgeries' },
-    { number: '15+', label: 'Years Experience' },
-    { number: '1000+', label: 'Patients Treated' },
-    { number: '98%', label: 'Success Rate' }
-  ];
-
-  const testimonials = [
-    {
-      name: 'Alemayehu T.',
-      location: 'Hossana',
-      text: 'After surgery at DAMC, I could walk again pain-free. Dr. Habtamu and his team treated me like family — their care was life-changing.'
-    },
-    {
-      name: 'Meseret K.',
-      location: 'Wolaita',
-      text: 'The rehabilitation program at DAMC helped me recover completely from my sports injury. I\'m back to playing football!'
-    },
-    {
-      name: 'Tigist M.',
-      location: 'Hawassa',
-      text: 'Professional, compassionate care. My child\'s orthopedic condition was treated with such expertise and kindness.'
+  // Calculate statistics from experiences data
+  const calculateStats = () => {
+    if (experiences.length === 0) {
+      return [
+        { number: '0', label: 'Successful Surgeries' },
+        { number: '0', label: 'Years Experience' },
+        { number: '0', label: 'Patients Treated' },
+        { number: '0%', label: 'Success Rate' }
+      ];
     }
-  ];
+
+    let totalSurgeries = 0;
+    let totalYears = 0;
+    let totalPatients = 0;
+    let totalSuccessRate = 0;
+    let validExperiences = 0;
+
+    experiences.forEach(experience => {
+      const metrics = experience.metrics;
+      
+      // Extract numbers from strings (remove +, %, etc.)
+      const surgeries = parseInt(metrics.successfulSurgeries?.replace(/[^\d]/g, '') || '0');
+      const years = parseInt(metrics.years?.replace(/[^\d]/g, '') || '0');
+      const patients = parseInt(metrics.patients?.replace(/[^\d]/g, '') || '0');
+      const successRate = parseInt(metrics.successRate?.replace(/[^\d]/g, '') || '0');
+
+      totalSurgeries += surgeries;
+      totalYears += years;
+      totalPatients += patients;
+      totalSuccessRate += successRate;
+      validExperiences++;
+    });
+
+    const avgSuccessRate = validExperiences > 0 ? Math.round(totalSuccessRate / validExperiences) : 0;
+
+    return [
+      { number: `${totalSurgeries}+`, label: 'Successful Surgeries' },
+      { number: `${totalYears}+`, label: 'Years Experience' },
+      { number: `${totalPatients}+`, label: 'Patients Treated' },
+      { number: `${avgSuccessRate}%`, label: 'Success Rate' }
+    ];
+  };
+
+  const stats = calculateStats();
+
+  // Fetch experiences from API
+  useEffect(() => {
+    const fetchExperiences = async () => {
+      try {
+        setExperiencesLoading(true);
+        const response = await fetch('http://localhost:5000/api/experiences');
+        if (response.ok) {
+          const data = await response.json();
+          setExperiences(data);
+        } else {
+          console.error('Failed to fetch experiences');
+          setExperiences([]);
+        }
+      } catch (error) {
+        console.error('Error fetching experiences:', error);
+        setExperiences([]);
+      } finally {
+        setExperiencesLoading(false);
+      }
+    };
+    fetchExperiences();
+  }, []);
+
+  // Fetch testimonials from API
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setTestimonialsLoading(true);
+        const response = await fetch('http://localhost:5000/api/testimonials');
+        if (response.ok) {
+          const data = await response.json();
+          // Filter only approved testimonials and limit to 3 for home page
+          const approvedTestimonials = data
+            .filter((testimonial: any) => testimonial.is_approved)
+            .slice(0, 3);
+          setTestimonials(approvedTestimonials);
+        } else {
+          console.error('Failed to fetch testimonials');
+          setTestimonials([]);
+        }
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+        setTestimonials([]);
+      } finally {
+        setTestimonialsLoading(false);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
+  // Function to convert YouTube URLs to embed URLs
+  const getYouTubeEmbedUrl = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  };
 
   const cardIndex = currentSlide % heroCards.length;
 
-  // Physicians data for carousel
-  const physicians = [
-    {
-      id: 1,
-      name: 'Dr. Meron Tadesse',
-      specialty: 'Psychiatrist (Specialist)',
-      department: 'Psychiatry',
-      avatar: '/src/img/doctor/dr_best.jpg'
-    },
-    {
-      id: 2,
-      name: 'Dr. Yohannes Adugna',
-      specialty: 'Dentist GP',
-      department: 'Dentistry',
-      avatar: '/src/img/doctor/5929338507342494306.jpg'
-    },
-    {
-      id: 3,
-      name: 'Dr. Mihret Dagne',
-      specialty: 'Anesthesiology (Specialist)',
-      department: 'Anesthesiology',
-      avatar: ''
-    },
-    {
-      id: 4,
-      name: 'Dr. Demeke Kebede',
-      specialty: 'Anesthesiology (Specialist)',
-      department: 'Anesthesiology',
-      avatar: ''
-    },
-    {
-      id: 5,
-      name: 'Dr. Almaz Bekele',
-      specialty: 'Orthopedic Surgeon',
-      department: 'Orthopedics',
-      avatar: '/src/img/doctor/dr_best.jpg'
-    }
-  ];
 
-  // News data for carousel
-  const newsItems = [
-    {
-      id: 1,
-      title: 'CPD Training on Stroke Care',
-      description: 'All MCM Stroke Unit faculty members, ER and ICU nurses, and the Head Nurse are invited to participate in a CPD training on Stroke Care and Management.',
-      image: '/src/img/news/5884433855463668554.jpg',
-      date: 'March 11, 2024'
-    },
-    {
-      id: 2,
-      title: 'Trauma Center Excellence',
-      description: 'Immediately cared by General Surgery, Orthopedic Surgery, Neurosurgery, Plastic Surgery, Emergency medicine and Critical Care specialists.',
-      image: '/src/img/news/6012332002944077703.jpg',
-      date: 'March 8, 2024'
-    },
-    {
-      id: 3,
-      title: 'Advanced Surgical Procedures',
-      description: 'Our team successfully performed complex surgical procedures using the latest medical technology and techniques.',
-      image: '/src/img/news/6012332002944077716.jpg',
-      date: 'March 5, 2024'
-    },
-    {
-      id: 4,
-      title: 'Medical Innovation Update',
-      description: 'Introduction of new medical equipment and procedures to enhance patient care and treatment outcomes.',
-      image: '/src/img/news/6015007097554586216.jpg',
-      date: 'March 2, 2024'
-    },
-    {
-      id: 5,
-      title: 'Community Health Program',
-      description: 'Launching new community health initiatives to provide better healthcare access to underserved populations.',
-      image: '/src/img/news/6015007097554586226.jpg',
-      date: 'February 28, 2024'
-    },
-    {
-      id: 6,
-      title: 'Research Collaboration',
-      description: 'Partnering with international medical institutions to advance orthopedic and trauma care research.',
-      image: '/src/img/news/6015007097554586227.jpg',
-      date: 'February 25, 2024'
-    },
-    {
-      id: 7,
-      title: 'Patient Success Stories',
-      description: 'Celebrating successful recovery stories and patient testimonials from our orthopedic and trauma care programs.',
-      image: '/src/img/news/6015007097554586231.jpg',
-      date: 'February 22, 2024'
-    }
-  ];
+  // Fetch physicians from API
+  useEffect(() => {
+    const fetchPhysicians = async () => {
+      try {
+        setPhysiciansLoading(true);
+        const response = await fetch('http://localhost:5000/api/physicians');
+        if (response.ok) {
+          const data = await response.json();
+          // Filter only active physicians
+          const activePhysicians = data.filter((physician: PhysicianItem) => physician.is_active);
+          setPhysicians(activePhysicians);
+        } else {
+          console.error('Failed to fetch physicians');
+          setPhysicians([]);
+        }
+      } catch (error) {
+        console.error('Error fetching physicians:', error);
+        setPhysicians([]);
+      } finally {
+        setPhysiciansLoading(false);
+      }
+    };
+    fetchPhysicians();
+  }, []);
+
 
   // Gallery images from all img folders
   const galleryImages = [
@@ -565,16 +656,31 @@ const Home = () => {
       <section className="py-12 sm:py-16 bg-blue-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-blue-200 mb-1 sm:mb-2">
-                  {stat.number}
+            {experiencesLoading ? (
+              // Show loading state
+              Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-blue-200 mb-1 sm:mb-2">
+                    ...
+                  </div>
+                  <div className="text-sm sm:text-base lg:text-lg text-blue-100">
+                    Loading...
+                  </div>
                 </div>
-                <div className="text-sm sm:text-base lg:text-lg text-blue-100">
-                  {stat.label}
+              ))
+            ) : (
+              // Show calculated stats
+              stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-blue-200 mb-1 sm:mb-2">
+                    {stat.number}
+                  </div>
+                  <div className="text-sm sm:text-base lg:text-lg text-blue-100">
+                    {stat.label}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           <div className="text-center mt-6 sm:mt-8">
             <Link
@@ -607,49 +713,76 @@ const Home = () => {
                className="flex gap-4 sm:gap-6 lg:gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth px-1 pb-2"
                style={{ scrollbarWidth: 'none' } as React.CSSProperties}
              >
-               {physicians.map((doc) => (
-                 <div key={doc.id} className="snap-start flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px] lg:w-[380px]">
-                   <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-[420px] sm:h-[450px] md:h-[480px] flex flex-col">
-                     {/* Image section - 60% of card height */}
-                     <div className="h-[252px] sm:h-[270px] md:h-[288px] relative overflow-hidden rounded-t-2xl">
-                       {doc.avatar ? (
-                         <img 
-                           src={doc.avatar} 
-                           alt={doc.name} 
-                           className="w-full h-full object-cover rounded-t-2xl" 
-                         />
-                       ) : (
-                         <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm sm:text-base lg:text-lg bg-gray-100 rounded-t-2xl">
-                           No Photo
-                         </div>
-                       )}
-                     </div>
-                     
-                     {/* Content section - 40% of card height */}
-                     <div className="flex-1 px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-6 text-center flex flex-col justify-between">
-                       <div>
-                         <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{doc.name}</h3>
-                         <div className="text-xs sm:text-sm space-y-1 sm:space-y-2">
-                           <div>
-                             <span className="font-semibold text-gray-700">Speciality : </span>
-                             <span className="text-gray-600">{doc.specialty}</span>
-                           </div>
-                           <div>
-                             <span className="font-semibold text-gray-700">Department : </span>
-                             <span className="text-gray-600">{doc.department}</span>
-                           </div>
-                         </div>
+               {physiciansLoading ? (
+                 // Show loading state
+                 Array.from({ length: 3 }).map((_, index) => (
+                   <div key={index} className="snap-start flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px] lg:w-[380px]">
+                     <div className="bg-white rounded-2xl shadow-md h-[420px] sm:h-[450px] md:h-[480px] flex flex-col">
+                       <div className="h-[252px] sm:h-[270px] md:h-[288px] bg-gray-200 rounded-t-2xl flex items-center justify-center">
+                         <div className="text-gray-400">Loading...</div>
                        </div>
-                       <Link
-                         to={`/physician/${doc.id}`}
-                         className="mt-3 sm:mt-4 inline-block bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
-                       >
-                         View More
-                       </Link>
+                       <div className="flex-1 px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-6 text-center flex flex-col justify-between">
+                         <div>
+                           <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                           <div className="h-4 bg-gray-200 rounded mb-1"></div>
+                           <div className="h-4 bg-gray-200 rounded"></div>
+                         </div>
+                         <div className="h-10 bg-gray-200 rounded"></div>
+                       </div>
                      </div>
                    </div>
+                 ))
+               ) : physicians.length === 0 ? (
+                 // Show empty state
+                 <div className="snap-start flex-shrink-0 w-full text-center py-12">
+                   <div className="text-gray-500">No physicians available at the moment.</div>
                  </div>
-               ))}
+               ) : (
+                 // Show physicians
+                 physicians.map((doc) => (
+                   <div key={doc.id} className="snap-start flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px] lg:w-[380px]">
+                     <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-[420px] sm:h-[450px] md:h-[480px] flex flex-col">
+                       {/* Image section - 60% of card height */}
+                       <div className="h-[252px] sm:h-[270px] md:h-[288px] relative overflow-hidden rounded-t-2xl">
+                         {doc.avatar_file ? (
+                           <img 
+                             src={`http://localhost:5000/uploads/${doc.avatar_file}`} 
+                             alt={doc.full_name} 
+                             className="w-full h-full object-cover rounded-t-2xl" 
+                           />
+                         ) : (
+                           <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm sm:text-base lg:text-lg bg-gray-100 rounded-t-2xl">
+                             No Photo
+                           </div>
+                         )}
+                       </div>
+                       
+                       {/* Content section - 40% of card height */}
+                       <div className="flex-1 px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-6 text-center flex flex-col justify-between">
+                         <div>
+                           <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{doc.full_name}</h3>
+                           <div className="text-xs sm:text-sm space-y-1 sm:space-y-2">
+                             <div>
+                               <span className="font-semibold text-gray-700">Speciality : </span>
+                               <span className="text-gray-600">{doc.title || 'Not specified'}</span>
+                             </div>
+                             <div>
+                               <span className="font-semibold text-gray-700">Location : </span>
+                               <span className="text-gray-600">{doc.location || 'Not specified'}</span>
+                             </div>
+                           </div>
+                         </div>
+                         <Link
+                           to={`/physician/${doc.id}`}
+                           className="mt-3 sm:mt-4 inline-block bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
+                         >
+                           View More
+                         </Link>
+                       </div>
+                     </div>
+                   </div>
+                 ))
+               )}
              </div>
 
             {/* Right Chevron - Hidden on mobile */}
@@ -685,35 +818,45 @@ const Home = () => {
                className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth px-1 pb-2"
                style={{ scrollbarWidth: 'none' } as React.CSSProperties}
              >
-               {newsItems.map((news) => (
-                 <div key={news.id} className="snap-start flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
-                   <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-[380px] sm:h-[400px] md:h-[420px] flex flex-col border border-gray-100">
-                     {/* Image section */}
-                     <div className="h-[180px] sm:h-[190px] md:h-[200px] relative overflow-hidden rounded-t-2xl">
-                       <img 
-                         src={news.image} 
-                         alt={news.title} 
-                         className="w-full h-full object-cover rounded-t-2xl" 
-                       />
-                     </div>
-                     
-                     {/* Content section */}
-                     <div className="flex-1 px-4 sm:px-6 pt-3 sm:pt-4 pb-4 sm:pb-6 flex flex-col justify-between">
-                       <div>
-                         <div className="text-xs text-blue-600 font-medium mb-1 sm:mb-2">{news.date}</div>
-                         <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2">{news.title}</h3>
-                         <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">{news.description}</p>
+               {loading ? (
+                 <div className="flex justify-center items-center w-full h-[400px]">
+                   <div className="text-gray-500">Loading news...</div>
+                 </div>
+               ) : newsItems.length === 0 ? (
+                 <div className="flex justify-center items-center w-full h-[400px]">
+                   <div className="text-gray-500">No news articles available at the moment.</div>
+                 </div>
+               ) : (
+                 newsItems.map((news) => (
+                   <div key={news.id} className="snap-start flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                     <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 h-[380px] sm:h-[400px] md:h-[420px] flex flex-col border border-gray-100">
+                       {/* Image section */}
+                       <div className="h-[180px] sm:h-[190px] md:h-[200px] relative overflow-hidden rounded-t-2xl">
+                         <img 
+                           src={news.image} 
+                           alt={news.title} 
+                           className="w-full h-full object-cover rounded-t-2xl" 
+                         />
                        </div>
-                       <Link
-                         to={`/news/${news.id}`}
-                         className="mt-3 sm:mt-4 inline-block bg-blue-600 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
-                       >
-                         View More
-                       </Link>
+                       
+                       {/* Content section */}
+                       <div className="flex-1 px-4 sm:px-6 pt-3 sm:pt-4 pb-4 sm:pb-6 flex flex-col justify-between">
+                         <div>
+                           <div className="text-xs text-blue-600 font-medium mb-1 sm:mb-2">{news.date}</div>
+                           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2">{news.title}</h3>
+                           <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">{news.description}</p>
+                         </div>
+                         <Link
+                           to={`/news/${news.id}`}
+                           className="mt-3 sm:mt-4 inline-block bg-blue-600 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
+                         >
+                           View More
+                         </Link>
+                       </div>
                      </div>
                    </div>
-                 </div>
-               ))}
+                 ))
+               )}
              </div>
 
              {/* Right Chevron - Hidden on mobile */}
@@ -786,22 +929,66 @@ const Home = () => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-gray-50 p-4 sm:p-6 rounded-lg">
-                <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4 italic">
-                  "{testimonial.text}"
-                </p>
-                <div className="flex items-center">
-                  <div className="bg-blue-600 text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center font-semibold mr-2 sm:mr-3 text-sm sm:text-base">
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900 text-sm sm:text-base">{testimonial.name}</div>
-                    <div className="text-xs sm:text-sm text-gray-600">{testimonial.location}</div>
+            {testimonialsLoading ? (
+              <div className="col-span-full text-center py-8">
+                <div className="text-gray-600">Loading testimonials...</div>
+              </div>
+            ) : testimonials.length === 0 ? (
+              <div className="col-span-full text-center py-8">
+                <div className="text-gray-600">No testimonials available at the moment.</div>
+              </div>
+            ) : (
+              testimonials.map((testimonial) => (
+                <div key={testimonial.id} className="bg-gray-50 p-4 sm:p-6 rounded-lg">
+                  {/* Video Window */}
+                  {testimonial.video_link && (
+                    <div className="mb-4">
+                      <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
+                        {testimonial.video_link.includes('youtube.com') || testimonial.video_link.includes('youtu.be') ? (
+                          <iframe
+                            src={getYouTubeEmbedUrl(testimonial.video_link)}
+                            title="Video testimonial"
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        ) : (
+                          <video
+                            src={testimonial.video_link}
+                            controls
+                            className="w-full h-full object-cover"
+                            preload="metadata"
+                            onError={(e) => {
+                              console.error('Video failed to load:', testimonial.video_link);
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          >
+                            Your browser does not support the video tag.
+                          </video>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Testimonial Content */}
+                  <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4 italic">
+                    "{testimonial.content}"
+                  </p>
+                  
+                  {/* Author Info */}
+                  <div className="flex items-center">
+                    <div className="bg-blue-600 text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center font-semibold mr-2 sm:mr-3 text-sm sm:text-base">
+                      {testimonial.author_name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900 text-sm sm:text-base">{testimonial.author_name}</div>
+                      <div className="text-xs sm:text-sm text-gray-600">{testimonial.author_title || 'Patient'}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           <div className="text-center mt-8 sm:mt-12">
             <Link
@@ -841,7 +1028,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
      
     </div>
   );

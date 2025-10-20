@@ -1,57 +1,53 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Quote } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+interface TestimonialItem {
+  id: string;
+  author_name: string;
+  author_title?: string;
+  rating: number;
+  content: string;
+  video_link?: string;
+  is_approved: boolean;
+  created_at: string;
+}
 
 const Testimonials = () => {
-  const testimonials = [
-    {
-      name: 'Alemayehu T.',
-      location: 'Hossana',
-      condition: 'Hip Replacement Surgery',
-      rating: 5,
-      text: 'After surgery at DAMC, I could walk again pain-free. Dr. Habtamu and his team treated me like family — their care was life-changing. The rehabilitation program was excellent and I\'m back to my normal activities.',
-      date: '2024'
-    },
-    {
-      name: 'Meseret K.',
-      location: 'Wolaita',
-      condition: 'Sports Injury Recovery',
-      rating: 5,
-      text: 'The rehabilitation program at DAMC helped me recover completely from my sports injury. I\'m back to playing football! The physiotherapy team was amazing and Dr. Habtamu\'s expertise made all the difference.',
-      date: '2024'
-    },
-    {
-      name: 'Tigist M.',
-      location: 'Hawassa',
-      condition: 'Pediatric Orthopedic Care',
-      rating: 5,
-      text: 'Professional, compassionate care. My child\'s orthopedic condition was treated with such expertise and kindness. Dr. Habtamu took the time to explain everything and made us feel comfortable throughout the process.',
-      date: '2024'
-    },
-    {
-      name: 'Getachew A.',
-      location: 'Sodo',
-      condition: 'Trauma Surgery',
-      rating: 5,
-      text: 'When I had a serious accident, Dr. Habtamu\'s emergency care saved my leg. The trauma surgery was successful and the follow-up care was exceptional. I\'m forever grateful for the expertise at DAMC.',
-      date: '2023'
-    },
-    {
-      name: 'Fikirte B.',
-      location: 'Arba Minch',
-      condition: 'Knee Arthroscopy',
-      rating: 5,
-      text: 'The knee arthroscopy procedure was minimally invasive and recovery was much faster than I expected. Dr. Habtamu\'s skill and the modern equipment at the clinic made all the difference in my treatment.',
-      date: '2023'
-    },
-    {
-      name: 'Yonas D.',
-      location: 'Jimma',
-      condition: 'Spinal Surgery',
-      rating: 5,
-      text: 'After years of back pain, Dr. Habtamu\'s spinal surgery gave me my life back. The procedure was successful and the post-operative care was thorough. I can now work and play with my children without pain.',
-      date: '2023'
-    }
-  ];
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  // Fetch testimonials from API
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/testimonials');
+        if (response.ok) {
+          const data = await response.json();
+          // Filter only approved testimonials
+          const approvedTestimonials = data.filter((testimonial: any) => testimonial.is_approved);
+          setTestimonials(approvedTestimonials);
+        } else {
+          console.error('Failed to fetch testimonials');
+          setTestimonials([]);
+        }
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+        setTestimonials([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
+  // Function to convert YouTube URLs to embed URLs
+  const getYouTubeEmbedUrl = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  };
 
   const stats = [
     { number: '99%', label: 'Patient Satisfaction Rate' },
@@ -113,36 +109,84 @@ const Testimonials = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                <div className="flex items-center mb-3 sm:mb-4">
-                  <Quote className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mr-2" />
-                  <div className="flex">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                </div>
-                
-                <p className="text-gray-700 mb-4 sm:mb-6 italic text-sm sm:text-base">
-                  "{testimonial.text}"
-                </p>
-                
-                <div className="border-t pt-3 sm:pt-4">
-                  <div className="flex items-center">
-                    <div className="bg-blue-600 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center font-semibold mr-3 sm:mr-4 text-sm sm:text-base">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-gray-900 text-sm sm:text-base">{testimonial.name}</div>
-                      <div className="text-xs sm:text-sm text-gray-600">{testimonial.location}</div>
-                      <div className="text-xs sm:text-sm text-blue-600 font-medium">{testimonial.condition}</div>
-                      <div className="text-xs text-gray-500">{testimonial.date}</div>
-                    </div>
-                  </div>
-                </div>
+            {loading ? (
+              <div className="col-span-full text-center py-12">
+                <div className="text-gray-600">Loading testimonials...</div>
               </div>
-            ))}
+            ) : testimonials.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <div className="text-gray-600">No testimonials available at the moment.</div>
+              </div>
+            ) : (
+              testimonials.map((testimonial) => (
+                <div key={testimonial.id} className="bg-white p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                  {/* Video Window */}
+                  {testimonial.video_link && (
+                    <div className="mb-4">
+                      <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
+                        {testimonial.video_link.includes('youtube.com') || testimonial.video_link.includes('youtu.be') ? (
+                          <iframe
+                            src={getYouTubeEmbedUrl(testimonial.video_link)}
+                            title="Video testimonial"
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        ) : (
+                          <video
+                            src={testimonial.video_link}
+                            controls
+                            className="w-full h-full object-cover"
+                            preload="metadata"
+                            onError={(e) => {
+                              console.error('Video failed to load:', testimonial.video_link);
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          >
+                            Your browser does not support the video tag.
+                          </video>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Rating and Quote */}
+                  <div className="flex items-center mb-3 sm:mb-4">
+                    <Quote className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mr-2" />
+                    <div className="flex">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Testimonial Content */}
+                  <p className="text-gray-700 mb-4 sm:mb-6 italic text-sm sm:text-base">
+                    "{testimonial.content}"
+                  </p>
+                  
+                  {/* Author Info */}
+                  <div className="border-t pt-3 sm:pt-4">
+                    <div className="flex items-center">
+                      <div className="bg-blue-600 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center font-semibold mr-3 sm:mr-4 text-sm sm:text-base">
+                        {testimonial.author_name.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900 text-sm sm:text-base">{testimonial.author_name}</div>
+                        <div className="text-xs sm:text-sm text-gray-600">{testimonial.author_title || 'Patient'}</div>
+                        <div className="text-xs text-gray-500">
+                          {testimonial.created_at ? new Date(testimonial.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long'
+                          }) : 'Recent'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>

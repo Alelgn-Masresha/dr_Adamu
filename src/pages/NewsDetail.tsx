@@ -1,71 +1,105 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, User, ChevronLeft, ChevronRight } from 'lucide-react';
 
+interface NewsArticle {
+  id: string;
+  title: string;
+  excerpt?: string;
+  content: string;
+  cover_image_file?: string;
+  created_at: string;
+  author_name?: string;
+}
+
+interface OtherNewsItem {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+}
+
 const NewsDetail = () => {
   const { id } = useParams();
-  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
+  const [currentNews, setCurrentNews] = useState<NewsArticle | null>(null);
+  const [otherNews, setOtherNews] = useState<OtherNewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
 
-  // Mock news data - in real app, this would come from API
-  const currentNews = {
-    id: 1,
-    title: 'Congratulations! Dr. Jikssa became the president of the Ethiopian Gastroenterology Association (EGA)! This is the first time from a private institution.',
-    description: 'Congratulations! Dr. Jikssa became the president of the Ethiopian Gastroenterology Association (EGA)! This is the first time from a private institution.',
-    image: '/src/img/news/5884433855463668554.jpg',
-    postedDate: '2025-08-18 06:35:49',
-    postedBy: 'Admin',
-    content: `We are thrilled to announce that Dr. Jikssa has been elected as the President of the Ethiopian Gastroenterology Association (EGA). This historic achievement marks the first time a physician from a private institution has been selected for this prestigious position.
+  // Fetch news data from API
+  useEffect(() => {
+    const fetchNewsData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch current news article
+        if (id) {
+          const currentResponse = await fetch(`http://localhost:5000/api/news/${id}`);
+          if (currentResponse.ok) {
+            const currentData = await currentResponse.json();
+            setCurrentNews(currentData);
+          } else {
+            setError('News article not found');
+            return;
+          }
+        }
+        
+        // Fetch other news for sidebar
+        const otherResponse = await fetch('http://localhost:5000/api/news/published');
+        if (otherResponse.ok) {
+          const otherData = await otherResponse.json();
+          // Filter out current news and transform data
+          const filteredOtherNews = otherData
+            .filter((news: any) => news.id !== id)
+            .slice(0, 4) // Limit to 4 items
+            .map((news: any) => ({
+              id: news.id,
+              title: news.title,
+              description: news.excerpt || news.content?.substring(0, 100) + '...' || 'No description',
+              image: news.cover_image_file ? `http://localhost:5000/uploads/${news.cover_image_file}` : '/src/img/news/default.jpg',
+              date: news.created_at ? new Date(news.created_at).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              }) : 'No date'
+            }));
+          setOtherNews(filteredOtherNews);
+        }
+      } catch (error) {
+        console.error('Error fetching news:', error);
+        setError('Failed to load news data');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-Dr. Jikssa's election reflects his outstanding contributions to the field of gastroenterology and his commitment to advancing medical care in Ethiopia. His leadership will help strengthen collaboration between public and private healthcare institutions.
+    fetchNewsData();
+  }, [id]);
 
-This milestone represents a significant step forward in recognizing the valuable contributions of private healthcare providers to the Ethiopian medical community. We congratulate Dr. Jikssa on this well-deserved honor and look forward to his continued leadership in advancing gastroenterology care across the country.`
-  };
+  // Auto-scroll functionality for news carousel
+  useEffect(() => {
+    if (!isAutoScrolling || otherNews.length <= 1) return;
 
-  // Other news data for sidebar
-  const otherNews = [
-    {
-      id: 1,
-      title: 'MCM Minimally Invasive Surgery Unit Launch',
-      description: 'One of the Pioneers in Minimally Invasive Surgery',
-      image: '/src/img/news/6012332002944077703.jpg',
-      date: 'March 8, 2024'
-    },
-    {
-      id: 2,
-      title: 'ANAPHYLAXIS Training Program',
-      description: 'Comprehensive training on emergency allergic reactions',
-      image: '/src/img/news/6012332002944077716.jpg',
-      date: 'March 5, 2024'
-    },
-    {
-      id: 3,
-      title: 'Medical Innovation Update',
-      description: 'Introduction of new medical equipment and procedures',
-      image: '/src/img/news/6015007097554586216.jpg',
-      date: 'March 2, 2024'
-    },
-    {
-      id: 4,
-      title: 'Community Health Program',
-      description: 'Launching new community health initiatives',
-      image: '/src/img/news/6015007097554586226.jpg',
-      date: 'February 28, 2024'
-    },
-    {
-      id: 5,
-      title: 'Research Collaboration',
-      description: 'Partnering with international medical institutions',
-      image: '/src/img/news/6015007097554586227.jpg',
-      date: 'February 25, 2024'
-    },
-    {
-      id: 6,
-      title: 'Patient Success Stories',
-      description: 'Celebrating successful recovery stories',
-      image: '/src/img/news/6015007097554586231.jpg',
-      date: 'February 22, 2024'
-    }
-  ];
+    const interval = setInterval(() => {
+      const container = document.getElementById('news-carousel');
+      if (!container) return;
+
+      const cardWidth = 280; // approximate card width including gap
+      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+      
+      if (container.scrollLeft >= maxScrollLeft - 10) {
+        // If at the end, scroll back to beginning
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        // Otherwise, scroll to next card
+        container.scrollBy({ left: cardWidth, behavior: 'smooth' });
+      }
+    }, 3000); // Auto-scroll every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoScrolling, otherNews.length]);
 
   const scrollNews = (direction: 'left' | 'right') => {
     const container = document.getElementById('news-carousel');
@@ -91,13 +125,22 @@ This milestone represents a significant step forward in recognizing the valuable
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="text-gray-500">Loading news article...</div>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="text-red-500">{error}</div>
+          </div>
+        ) : currentNews ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content Area */}
           <div className="lg:col-span-2">
             {/* Featured Image */}
             <div className="mb-6">
               <img
-                src={currentNews.image}
+                src={currentNews.cover_image_file ? `http://localhost:5000/uploads/${currentNews.cover_image_file}` : '/src/img/news/default.jpg'}
                 alt={currentNews.title}
                 className="w-full h-96 object-cover rounded-lg shadow-md"
               />
@@ -107,24 +150,29 @@ This milestone represents a significant step forward in recognizing the valuable
             <div className="mb-4 space-y-2 text-sm text-gray-600">
               <div className="flex items-center">
                 <Calendar className="h-4 w-4 mr-2" />
-                <span>Posted Date: {currentNews.postedDate}</span>
+                <span>Posted Date: {currentNews.created_at ? new Date(currentNews.created_at).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                }) : 'No date'}</span>
               </div>
               <div className="flex items-center">
                 <User className="h-4 w-4 mr-2" />
-                <span>Posted By: {currentNews.postedBy}</span>
+                <span>Posted By: {currentNews.author_name || 'Admin'}</span>
               </div>
             </div>
 
             {/* Article Title */}
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-              Title: {currentNews.title}
+              {currentNews.title}
             </h1>
 
-            {/* Article Description */}
+            {/* Article Excerpt */}
+            {currentNews.excerpt && (
             <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">Description:</h2>
-              <p className="text-gray-700 leading-relaxed">{currentNews.description}</p>
+                <p className="text-lg text-gray-700 leading-relaxed font-medium">{currentNews.excerpt}</p>
             </div>
+            )}
 
             {/* Article Content */}
             <div className="prose max-w-none">
@@ -137,7 +185,24 @@ This milestone represents a significant step forward in recognizing the valuable
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Other DAMC News</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-900">Other DAMC News</h2>
+                <button
+                  onClick={() => setIsAutoScrolling(!isAutoScrolling)}
+                  className="text-gray-500 hover:text-gray-700 transition-colors"
+                  title={isAutoScrolling ? "Pause auto-scroll" : "Resume auto-scroll"}
+                >
+                  {isAutoScrolling ? (
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </button>
+              </div>
               
               <div className="relative">
                 {/* Left Chevron */}
@@ -154,6 +219,8 @@ This milestone represents a significant step forward in recognizing the valuable
                   id="news-carousel"
                   className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth px-1 pb-2"
                   style={{ scrollbarWidth: 'none' } as React.CSSProperties}
+                  onMouseEnter={() => setIsAutoScrolling(false)}
+                  onMouseLeave={() => setIsAutoScrolling(true)}
                 >
                   {otherNews.map((news) => (
                     <Link
@@ -204,6 +271,7 @@ This milestone represents a significant step forward in recognizing the valuable
             </div>
           </div>
         </div>
+        ) : null}
       </div>
     </div>
   );
