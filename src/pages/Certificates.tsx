@@ -1,6 +1,34 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight, Award, Trophy, Star, Shield, GraduationCap, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Award, Trophy, Star, Shield, GraduationCap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+// WebP Image Component with fallback
+const WebPImage = ({ webpSrc, fallbackSrc, alt, className, ...props }: { 
+  webpSrc: string; 
+  fallbackSrc: string; 
+  alt: string; 
+  className?: string; 
+  [key: string]: any;
+}) => {
+  const [imgSrc, setImgSrc] = useState(webpSrc);
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    if (!hasError && imgSrc === webpSrc) {
+      setHasError(true);
+      setImgSrc(fallbackSrc);
+    }
+  };
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      className={className}
+      onError={handleError}
+      {...props}
+    />
+  );
+};
 
 const Certificates = () => {
   const awards = [
@@ -24,33 +52,6 @@ const Certificates = () => {
       year: '2018',
       description: 'Recognized for outstanding presentation and contribution to the Ethiopian Society of Orthopedic Surgery.',
       category: 'Academic Excellence'
-    }
-  ];
-
-  const certifications = [
-    {
-      title: 'COSECSA Certification',
-      organization: 'College of Surgeons of East, Central, and Southern Africa',
-      description: 'Fellow of the College of Surgeons (FCS-ECSA) - Orthopedic Surgery',
-      icon: <Shield className="h-8 w-8" />
-    },
-    {
-      title: 'SIGN Care International',
-      organization: 'Surgical Implant Generation Network',
-      description: 'Certified in orthopedic trauma care and surgical implant techniques',
-      icon: <Award className="h-8 w-8" />
-    },
-    {
-      title: 'CURE Ethiopia Certification',
-      organization: 'CURE International',
-      description: 'Specialized training and certification in pediatric orthopedic care',
-      icon: <Star className="h-8 w-8" />
-    },
-    {
-      title: 'AO Alliance Faculty',
-      organization: 'AO Foundation',
-      description: 'Faculty member for trauma and orthopedic surgery education programs',
-      icon: <GraduationCap className="h-8 w-8" />
     }
   ];
 
@@ -86,10 +87,26 @@ const Certificates = () => {
 
   // Certificates image slider
   const certificateImages = [
-    '/src/img/certificates/6012332002944077734.jpg',
-    '/src/img/certificates/6012332002944077735.jpg',
-    '/src/img/certificates/6012332002944077736.jpg',
-    '/src/img/certificates/6012332002944077737.jpg',
+    {
+      webpSrc: '/src/img/certificates/6012332002944077734.webp',
+      fallbackSrc: '/src/img/certificates/6012332002944077734.jpg',
+      alt: 'Certificate 1'
+    },
+    {
+      webpSrc: '/src/img/certificates/6012332002944077735.webp',
+      fallbackSrc: '/src/img/certificates/6012332002944077735.jpg',
+      alt: 'Certificate 2'
+    },
+    {
+      webpSrc: '/src/img/certificates/6012332002944077736.webp',
+      fallbackSrc: '/src/img/certificates/6012332002944077736.jpg',
+      alt: 'Certificate 3'
+    },
+    {
+      webpSrc: '/src/img/certificates/6012332002944077737.webp',
+      fallbackSrc: '/src/img/certificates/6012332002944077737.jpg',
+      alt: 'Certificate 4'
+    },
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -187,14 +204,15 @@ const Certificates = () => {
           <div className="relative">
             <div className="overflow-hidden rounded-xl shadow">
               <div className="relative h-[340px] sm:h-[420px] bg-gray-100">
-                {certificateImages.map((src, index) => (
-                  <img
-                    key={src}
-                    src={src}
-                    alt={`Certificate ${index + 1}`}
+                {certificateImages.map((image, index) => (
+                  <WebPImage
+                    key={index}
+                    webpSrc={image.webpSrc}
+                    fallbackSrc={image.fallbackSrc}
+                    alt={image.alt}
                     className={`absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-500 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
-                  />)
-                )}
+                  />
+                ))}
               </div>
             </div>
 

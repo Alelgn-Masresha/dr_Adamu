@@ -2,6 +2,35 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Users, Award, Heart, Stethoscope, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
+// WebP Image Component with fallback
+const WebPImage = ({ webpSrc, fallbackSrc, alt, className, ...props }: { 
+  webpSrc: string; 
+  fallbackSrc: string; 
+  alt: string; 
+  className?: string; 
+  [key: string]: any;
+}) => {
+  const [imgSrc, setImgSrc] = useState(webpSrc);
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    if (!hasError && imgSrc === webpSrc) {
+      setHasError(true);
+      setImgSrc(fallbackSrc);
+    }
+  };
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      className={className}
+      onError={handleError}
+      {...props}
+    />
+  );
+};
+
 interface NewsItem {
   id: string;
   title: string;
@@ -52,28 +81,32 @@ const Home = () => {
   const heroSlides = [
     {
       id: 1,
-      image: '/src/img/hero/6015007097554586193.jpg',
+      webpImage: '/src/img/hero/6015007097554586193.webp',
+      fallbackImage: '/src/img/hero/6015007097554586193.jpg',
       title: 'We Care About Your',
       subtitle: 'Health',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     },
     {
       id: 2,
-      image: '/src/img/hero/6015007097554586191.jpg',
+      webpImage: '/src/img/hero/6015007097554586191.webp',
+      fallbackImage: '/src/img/hero/6015007097554586191.jpg',
       title: 'Empathy Meets',
       subtitle: 'Expertise',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     },
     {
       id: 3,
-      image: '/src/img/hero/6015007097554586187.jpg',
+      webpImage: '/src/img/hero/6015007097554586187.webp',
+      fallbackImage: '/src/img/hero/6015007097554586187.jpg',
       title: 'Excellence in Every Step of ',
       subtitle: 'Care',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     },
     {
       id: 4,
-      image: '/src/img/hero/6014611982038191001.jpg',
+      webpImage: '/src/img/hero/6014611982038191001.webp',
+      fallbackImage: '/src/img/hero/6014611982038191001.jpg',
       title: 'Compassionate Care, Trusted Professionals',
       subtitle: 'Excellence',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
@@ -83,31 +116,36 @@ const Home = () => {
   const heroCards = [
     {
       id: 1,
-      image: '/src/img/hero/6015007097554586193.jpg',
+      webpImage: '/src/img/hero/6015007097554586193.webp',
+      fallbackImage: '/src/img/hero/6015007097554586193.jpg',
       title: 'DAMC Expertise',
       description: 'Advanced orthopedic and trauma care'
     },
     {
       id: 2,
-      image: '/src/img/hero/6015007097554586191.jpg',
+      webpImage: '/src/img/hero/6015007097554586191.webp',
+      fallbackImage: '/src/img/hero/6015007097554586191.jpg',
       title: 'DAMC Innovation',
       description: 'Cutting-edge medical technology'
     },
     {
       id: 3,
-      image: '/src/img/hero/6015007097554586187.jpg',
+      webpImage: '/src/img/hero/6015007097554586187.webp',
+      fallbackImage: '/src/img/hero/6015007097554586187.jpg',
       title: 'DAMC Excellence',
       description: 'World-class medical services'
     },
     {
       id: 4,
-      image: '/src/img/hero/6014611982038191001.jpg',
+      webpImage: '/src/img/hero/6014611982038191001.webp',
+      fallbackImage: '/src/img/hero/6014611982038191001.jpg',
       title: 'DAMC Care',
       description: 'Compassionate patient care'
     },
     {
       id: 5,
-      image: '/src/img/hero/6015007097554586193.jpg',
+      webpImage: '/src/img/hero/6015007097554586193.webp',
+      fallbackImage: '/src/img/hero/6015007097554586193.jpg',
       title: 'DAMC Quality',
       description: 'Highest standards of care'
     }
@@ -429,9 +467,11 @@ const Home = () => {
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: `url(${slide.image})` }}
+              <WebPImage
+                webpSrc={slide.webpImage}
+                fallbackSrc={slide.fallbackImage}
+                alt={`Hero slide ${slide.id}`}
+                className="absolute inset-0 w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-700/60" />
             </div>
@@ -504,9 +544,11 @@ const Home = () => {
                   {heroCards.map((card) => (
                     <div key={card.id} className="w-full flex-shrink-0">
                       <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                        <div
-                          className="h-24 sm:h-28 md:h-32 bg-cover bg-center"
-                          style={{ backgroundImage: `url(${card.image})` }}
+                        <WebPImage
+                          webpSrc={card.webpImage}
+                          fallbackSrc={card.fallbackImage}
+                          alt={card.title}
+                          className="h-24 sm:h-28 md:h-32 w-full object-cover"
                         />
                         <div className="p-2 sm:p-3">
                           <h3 className="font-semibold text-gray-900 text-xs sm:text-sm mb-1">{card.title}</h3>
@@ -602,7 +644,7 @@ const Home = () => {
             <div className="flex justify-center lg:justify-end order-1 lg:order-2">
               <div className="relative">
                 <img
-                  src="/src/img/doctor/dr_best.jpg"
+                  src="/src/img/doctor/dr_best.webp"
                   alt="Dr. Habtamu Tamrat Derilo"
                   className="w-64 h-80 sm:w-80 sm:h-96 md:w-96 md:h-[28rem] rounded-2xl object-cover"
                 />
