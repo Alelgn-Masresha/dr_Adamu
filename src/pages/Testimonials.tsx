@@ -58,43 +58,8 @@ const Testimonials = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-12 sm:py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Patient Testimonials</h1>
-            <p className="text-base sm:text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-              Hear from our patients about their experience at Dr. Habtamu Medium Clinic
-            </p>
-          </div>
-        </div>
-      </section>
 
-      {/* Stats Section */}
-      <section className="py-12 sm:py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-              Our Success Stories
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-              Numbers that reflect our commitment to excellence in orthopedic and trauma care
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-blue-600 mb-1 sm:mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-sm sm:text-base md:text-lg text-gray-700">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       {/* Testimonials Grid */}
       <section className="py-12 sm:py-16 bg-gray-50">
@@ -247,32 +212,6 @@ const Testimonials = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-12 sm:py-16 bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-            Ready to Experience Our Care?
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-blue-100 max-w-3xl mx-auto">
-            Join the hundreds of patients who have trusted Dr. Habtamu Medium Clinic with their orthopedic care.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link
-              to="/contact"
-              className="bg-white text-blue-600 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center text-sm sm:text-base"
-            >
-              Book Your Appointment
-              <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-            </Link>
-            <Link
-              to="/services"
-              className="border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors text-sm sm:text-base"
-            >
-              Learn About Our Services
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

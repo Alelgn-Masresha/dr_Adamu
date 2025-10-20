@@ -79,17 +79,6 @@ const Contributions = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Contributions & Community Service</h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Making a difference through volunteer work, mentorship, and community service in orthopedic care
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Impact Stats */}
       <section className="py-16 bg-white">
@@ -240,36 +229,7 @@ const Contributions = () => {
         </div>
       </section>
 
-      {/* Mission Statement */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Our Mission to Serve
-            </h2>
-            <p className="text-xl mb-8 text-blue-100 max-w-4xl mx-auto">
-              "We believe that quality orthopedic care should be accessible to everyone, regardless of their location or economic circumstances. 
-              Through volunteer work, community service, and professional contributions, we are committed to advancing healthcare 
-              and making a positive impact on the lives of patients and medical professionals throughout Ethiopia and beyond."
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/contact"
-                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center"
-              >
-                Join Our Mission
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link
-                to="/about"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
-              >
-                Learn More About Us
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Recognition */}
       <section className="py-16 bg-white">

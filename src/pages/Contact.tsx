@@ -63,17 +63,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-12 sm:py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 px-2">Contact Us</h1>
-            <p className="text-base sm:text-lg lg:text-xl text-blue-100 max-w-3xl mx-auto px-4">
-              Get in touch with Dr. Habtamu Medium Clinic for consultations, appointments, or emergency care
-            </p>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Contact Information */}
       <section className="py-12 sm:py-16 bg-white">

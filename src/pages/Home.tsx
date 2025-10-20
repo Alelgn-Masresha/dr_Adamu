@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Users, Award, Heart, Stethoscope, Clock, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Users, Award, Heart, Stethoscope, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
 interface NewsItem {
@@ -452,12 +452,7 @@ const Home = () => {
                   >
                     Contact Us
                   </Link>
-                  <Link
-                    to="/contact"
-                    className="border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors text-sm sm:text-base"
-                  >
-                    Appointment
-                  </Link>
+                  
                 </div>
               </div>
             </div>
@@ -1002,32 +997,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-12 sm:py-16 bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-2">
-            Ready to Restore Your Movement?
-          </h2>
-          <p className="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 text-blue-100 max-w-3xl mx-auto px-4">
-            Contact Dr. Habtamu Medium Clinic today to schedule your consultation and take the first step toward better health.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
-            <Link
-              to="/contact"
-              className="bg-white text-blue-600 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center text-sm sm:text-base"
-            >
-              <Clock className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Book Appointment
-            </Link>
-            <Link
-              to="/contact"
-              className="border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors text-sm sm:text-base"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </div>
-      </section>
      
     </div>
   );

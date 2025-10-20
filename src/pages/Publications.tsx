@@ -114,17 +114,7 @@ const Publications = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Research Publications</h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Advancing orthopedic and trauma care through evidence-based research and scientific publications
-            </p>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Research Stats */}
       <section className="py-16 bg-white">
@@ -284,64 +274,9 @@ const Publications = () => {
         </div>
       </section>
 
-      {/* Research Mission */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Our Research Mission
-            </h2>
-            <p className="text-xl mb-8 text-blue-100 max-w-4xl mx-auto">
-              "Our research is driven by the need to improve orthopedic and trauma care outcomes, especially in resource-limited settings. 
-              Through evidence-based research and international collaboration, we aim to develop innovative solutions that enhance patient care, 
-              advance medical education, and contribute to the global body of orthopedic knowledge."
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/contact"
-                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center"
-              >
-                Collaborate with Us
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link
-                to="/contact"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
-              >
-                Contact for Research
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
-      {/* Call to Action */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Access Our Research
-          </h2>
-          <p className="text-xl mb-8 text-gray-600 max-w-3xl mx-auto">
-            Interested in our research or want to collaborate on orthopedic and trauma care studies? 
-            Contact us to learn more about our ongoing research projects and collaboration opportunities.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/contact"
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-flex items-center justify-center"
-            >
-              Request Research Information
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-            <Link
-              to="/about"
-              className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors"
-            >
-              Learn About Our Team
-            </Link>
-          </div>
-        </div>
-      </section>
+      
     </div>
   );
 };

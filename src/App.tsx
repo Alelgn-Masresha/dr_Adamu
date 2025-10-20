@@ -12,7 +12,6 @@ import AdminTestimonials from './pages/admin/AdminTestimonials';
 import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
-import Presentations from './pages/Presentations';
 import Certificates from './pages/Certificates';
 import Contributions from './pages/Contributions';
 import Testimonials from './pages/Testimonials';
@@ -31,7 +30,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/presentations" element={<Presentations />} />
           <Route path="/certificates" element={<Certificates />} />
           <Route path="/contributions" element={<Contributions />} />
           <Route path="/testimonials" element={<Testimonials />} />

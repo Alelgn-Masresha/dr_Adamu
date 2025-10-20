@@ -49,13 +49,6 @@ const Experience = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
-      <section className="bg-blue-900 text-white py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">Experience</h1>
-          <p className="text-blue-100 max-w-3xl mx-auto">Detailed institutional experience and key performance metrics.</p>
-        </div>
-      </section>
 
       {/* Institutions */}
       <section className="py-12 sm:py-16 bg-white">
