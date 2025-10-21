@@ -21,7 +21,7 @@ const Testimonials = () => {
     const fetchTestimonials = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/testimonials');
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/testimonials`);
         if (response.ok) {
           const data = await response.json();
           // Filter only approved testimonials

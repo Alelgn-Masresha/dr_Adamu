@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminSettings from './pages/admin/AdminSettings';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminPublications from './pages/admin/AdminPublications';
 import AdminExperiences from './pages/admin/AdminExperiences';
@@ -39,8 +42,15 @@ function App() {
           <Route path="/news/:id" element={<NewsDetail />} />
         </Route>
 
-        {/* Admin routes under /admin */}
-        <Route path="/admin" element={<AdminLayout />}>
+        {/* Admin login route */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        {/* Protected admin routes */}
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }>
           <Route index element={<AdminDashboard />} />
           <Route path="publications" element={<AdminPublications />} />
           <Route path="experiences" element={<AdminExperiences />} />
@@ -48,6 +58,7 @@ function App() {
           <Route path="news" element={<AdminNews />} />
           <Route path="gallery" element={<AdminGallery />} />
           <Route path="testimonials" element={<AdminTestimonials />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Routes>
     </Router>

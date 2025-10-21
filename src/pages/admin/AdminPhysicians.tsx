@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
-import { physiciansAPI } from '../../services/api';
+import { physiciansAPI, getUploadsUrl } from '../../services/adminApi';
 
 const AdminPhysicians = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -205,7 +205,7 @@ const AdminPhysicians = () => {
               <div className="col-span-1">
                 {physician.avatar_file ? (
                   <img
-                    src={`http://localhost:5000/uploads/${physician.avatar_file}`}
+                    src={getUploadsUrl(physician.avatar_file)}
                     alt={physician.full_name}
                     className="w-10 h-10 object-cover rounded-full"
                     onError={(e) => {

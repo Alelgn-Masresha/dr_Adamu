@@ -1,12 +1,19 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-const UPLOADS_BASE_URL = import.meta.env.VITE_UPLOADS_BASE_URL || 'http://localhost:5000/uploads';
 
-// Generic API request function
+// Token management
+const getToken = () => localStorage.getItem('admin_token');
+const setToken = (token) => localStorage.setItem('admin_token', token);
+const removeToken = () => localStorage.removeItem('admin_token');
+
+// Generic API request function with authentication
 const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
+  const token = getToken();
+  
   const config: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` }),
       ...options.headers,
     },
     ...options,
@@ -16,6 +23,12 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
     const response = await fetch(url, config);
     
     if (!response.ok) {
+      if (response.status === 401) {
+        // Token expired or invalid, remove it
+        removeToken();
+        window.location.href = '/admin/login';
+        throw new Error('Authentication required');
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
@@ -26,17 +39,78 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
   }
 };
 
-// File upload function
-const uploadFile = async (endpoint: string, formData: FormData, method: string = 'POST') => {
+// Authentication API
+export const authAPI = {
+  login: async (username: string, password: string) => {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Login failed');
+    }
+
+    const data = await response.json();
+    setToken(data.token);
+    return data;
+  },
+
+  logout: async () => {
+    try {
+      await apiRequest('/auth/logout', { method: 'POST' });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      removeToken();
+    }
+  },
+
+  getCurrentUser: async () => {
+    return apiRequest('/auth/me');
+  },
+
+  changePassword: async (currentPassword: string, newPassword: string) => {
+    return apiRequest('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+  },
+
+  updateProfile: async (fullName: string, email: string) => {
+    return apiRequest('/auth/profile', {
+      method: 'PUT',
+      body: JSON.stringify({ fullName, email }),
+    });
+  },
+
+  isAuthenticated: () => !!getToken(),
+};
+
+// File upload function with authentication
+export const uploadFile = async (endpoint: string, formData: FormData, method: string = 'POST') => {
   const url = `${API_BASE_URL}${endpoint}`;
+  const token = getToken();
   
   try {
     const response = await fetch(url, {
       method: method,
+      headers: {
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+      },
       body: formData,
     });
     
     if (!response.ok) {
+      if (response.status === 401) {
+        removeToken();
+        window.location.href = '/admin/login';
+        throw new Error('Authentication required');
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
@@ -255,6 +329,6 @@ export const healthAPI = {
 
 // Helper function to get uploads URL
 export const getUploadsUrl = (filename: string) => {
+  const UPLOADS_BASE_URL = import.meta.env.VITE_UPLOADS_BASE_URL || 'http://localhost:5000/uploads';
   return `${UPLOADS_BASE_URL}/${filename}`;
 };
-

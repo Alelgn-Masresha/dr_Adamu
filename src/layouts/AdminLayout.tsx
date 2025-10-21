@@ -1,9 +1,43 @@
-import { Link, NavLink, Outlet } from 'react-router-dom';
-import { Menu, LayoutGrid, FilePlus2, Image, Newspaper, Users, Briefcase, BookOpenText } from 'lucide-react';
-import { useState } from 'react';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Menu, LayoutGrid, FilePlus2, Image, Newspaper, Users, Briefcase, BookOpenText, LogOut, User, Settings } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { authAPI } from '../services/adminApi';
 
 const AdminLayout = () => {
   const [open, setOpen] = useState(true);
+  const [user, setUser] = useState<any>(null);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get user info from localStorage
+    const userData = localStorage.getItem('admin_user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
+    // Close user menu when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.user-menu-container')) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await authAPI.logout();
+      navigate('/admin/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Force logout even if API call fails
+      navigate('/admin/login');
+    }
+  };
 
   const navItems = [
     { name: 'Publications', to: '/admin/publications', icon: BookOpenText },
@@ -12,6 +46,7 @@ const AdminLayout = () => {
     { name: 'News', to: '/admin/news', icon: Newspaper },
     { name: 'Gallery', to: '/admin/gallery', icon: Image },
     { name: 'Testimonials', to: '/admin/testimonials', icon: FilePlus2 },
+    { name: 'Settings', to: '/admin/settings', icon: Settings },
   ];
 
   return (
@@ -42,10 +77,35 @@ const AdminLayout = () => {
         {/* Main */}
         <div className="flex-1">
           <header className="bg-white border-b border-gray-100 px-6 py-3 flex items-center justify-between">
-            <div className="text-sm text-gray-500">Admin</div>
-            <div className="flex items-center gap-2">
-              {/* Placeholder for user menu */}
-              <div className="w-8 h-8 rounded-full bg-gray-200" />
+            <div className="text-sm text-gray-500">Admin Dashboard</div>
+            <div className="flex items-center gap-4">
+              <div className="relative user-menu-container">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900"
+                >
+                  <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
+                    <User className="h-4 w-4 text-indigo-600" />
+                  </div>
+                  <span className="hidden sm:block">{user?.full_name || user?.username}</span>
+                </button>
+                
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                    <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+                      <div className="font-medium">{user?.full_name || user?.username}</div>
+                      <div className="text-gray-500">{user?.email}</div>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign out
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </header>
           <main className="p-6">

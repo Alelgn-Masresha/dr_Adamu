@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
-import { newsAPI } from '../../services/api';
+import { newsAPI, getUploadsUrl } from '../../services/adminApi';
 
 const AdminNews = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -213,7 +213,7 @@ const AdminNews = () => {
               <div className="col-span-1">
                 {news.cover_image_file ? (
                   <img
-                    src={`http://localhost:5000/uploads/${news.cover_image_file}`}
+                    src={getUploadsUrl(news.cover_image_file)}
                     alt={news.title}
                     className="w-12 h-8 object-cover rounded"
                     onError={(e) => {

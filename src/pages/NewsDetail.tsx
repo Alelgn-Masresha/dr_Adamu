@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { getUploadsUrl } from '../services/api';
 
 interface NewsArticle {
   id: string;
@@ -36,7 +37,7 @@ const NewsDetail = () => {
         
         // Fetch current news article
         if (id) {
-          const currentResponse = await fetch(`http://localhost:5000/api/news/${id}`);
+          const currentResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/news/${id}`);
           if (currentResponse.ok) {
             const currentData = await currentResponse.json();
             setCurrentNews(currentData);
@@ -47,7 +48,7 @@ const NewsDetail = () => {
         }
         
         // Fetch other news for sidebar
-        const otherResponse = await fetch('http://localhost:5000/api/news/published');
+        const otherResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/news/published`);
         if (otherResponse.ok) {
           const otherData = await otherResponse.json();
           // Filter out current news and transform data
@@ -58,7 +59,7 @@ const NewsDetail = () => {
               id: news.id,
               title: news.title,
               description: news.excerpt || news.content?.substring(0, 100) + '...' || 'No description',
-              image: news.cover_image_file ? `http://localhost:5000/uploads/${news.cover_image_file}` : '/src/img/news/default.jpg',
+              image: news.cover_image_file ? getUploadsUrl(news.cover_image_file) : '/src/img/news/default.jpg',
               date: news.created_at ? new Date(news.created_at).toLocaleDateString('en-US', { 
                 year: 'numeric', 
                 month: 'long', 
@@ -140,7 +141,7 @@ const NewsDetail = () => {
             {/* Featured Image */}
             <div className="mb-6">
               <img
-                src={currentNews.cover_image_file ? `http://localhost:5000/uploads/${currentNews.cover_image_file}` : '/src/img/news/default.jpg'}
+                src={currentNews.cover_image_file ? getUploadsUrl(currentNews.cover_image_file) : '/src/img/news/default.jpg'}
                 alt={currentNews.title}
                 className="w-full h-96 object-cover rounded-lg shadow-md"
               />

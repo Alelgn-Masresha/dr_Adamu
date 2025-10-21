@@ -4,7 +4,11 @@ const path = require('path');
 const { initDatabase } = require('./database');
 const config = require('./config');
 
+// Load environment variables
+require('dotenv').config();
+
 // Import routes
+const authRoutes = require('./routes/auth');
 const publicationsRoutes = require('./routes/publications');
 const servicesRoutes = require('./routes/services');
 const experiencesRoutes = require('./routes/experiences');
@@ -23,7 +27,14 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Serve static files from dist folder in production
+if (config.server.env === 'production') {
+  const distPath = path.join(__dirname, '..', 'dist');
+  app.use(express.static(distPath));
+}
+
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/publications', publicationsRoutes);
 app.use('/api/services', servicesRoutes);
 app.use('/api/experiences', experiencesRoutes);
@@ -52,10 +63,16 @@ app.use((error, req, res, next) => {
 
 // 404 handler
 app.use('*', (req, res) => {
-  res.status(404).json({ 
-    error: 'Not found',
-    message: 'The requested resource was not found' 
-  });
+  // In production, serve index.html for non-API routes (SPA fallback)
+  if (config.server.env === 'production' && !req.originalUrl.startsWith('/api')) {
+    const indexPath = path.join(__dirname, '..', 'dist', 'index.html');
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).json({ 
+      error: 'Not found',
+      message: 'The requested resource was not found' 
+    });
+  }
 });
 
 // Start server

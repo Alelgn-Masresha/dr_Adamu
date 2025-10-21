@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Search, Calendar, Clock, MapPin, Phone, Mail } from 'lucide-react';
+import { getUploadsUrl } from '../services/api';
 
 interface Physician {
   id: string;
@@ -33,7 +34,7 @@ const PhysicianDetail = () => {
         
         // Fetch specific physician
         if (id) {
-          const response = await fetch(`http://localhost:5000/api/physicians/${id}`);
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/physicians/${id}`);
           if (response.ok) {
             const data = await response.json();
             setPhysician(data);
@@ -43,7 +44,7 @@ const PhysicianDetail = () => {
         }
         
         // Fetch all physicians for "Other Physicians" section
-        const allPhysiciansResponse = await fetch('http://localhost:5000/api/physicians');
+        const allPhysiciansResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/physicians`);
         if (allPhysiciansResponse.ok) {
           const allPhysicians = await allPhysiciansResponse.json();
           // Filter out current physician and only show active ones
@@ -108,7 +109,7 @@ const PhysicianDetail = () => {
                 <div className="w-48 h-48 mx-auto mb-6 rounded-lg overflow-hidden shadow-lg">
                   {physician.avatar_file ? (
                     <img
-                      src={`http://localhost:5000/uploads/${physician.avatar_file}`}
+                      src={getUploadsUrl(physician.avatar_file)}
                       alt={physician.full_name}
                       className="w-full h-full object-cover"
                     />
@@ -207,7 +208,7 @@ const PhysicianDetail = () => {
                 <div className="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden shadow-md">
                   {doctor.avatar_file ? (
                     <img
-                      src={`http://localhost:5000/uploads/${doctor.avatar_file}`}
+                      src={getUploadsUrl(doctor.avatar_file)}
                       alt={doctor.full_name}
                       className="w-full h-full object-cover"
                     />

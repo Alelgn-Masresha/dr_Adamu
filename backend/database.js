@@ -39,6 +39,10 @@ const initDatabase = async () => {
     
     await query(schema);
     console.log('Database tables initialized successfully');
+    
+    // Create initial admin user if none exists
+    const { createInitialAdmin } = require('./scripts/createInitialAdmin');
+    await createInitialAdmin(query);
   } catch (error) {
     console.error('Error initializing database:', error);
     throw error;

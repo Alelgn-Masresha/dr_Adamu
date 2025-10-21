@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
-import { galleryAPI } from '../../services/api';
+import { galleryAPI, getUploadsUrl } from '../../services/adminApi';
 
 const AdminGallery = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -113,7 +113,7 @@ const AdminGallery = () => {
               <div className="aspect-square relative">
                 {item.content_type?.startsWith('image/') ? (
                   <img
-                    src={`http://localhost:5000/uploads/${item.file_path}`}
+                    src={getUploadsUrl(item.file_path)}
                     alt={item.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -134,7 +134,7 @@ const AdminGallery = () => {
                   />
                 ) : item.content_type?.startsWith('video/') ? (
                   <video
-                    src={`http://localhost:5000/uploads/${item.file_path}`}
+                    src={getUploadsUrl(item.file_path)}
                     className="w-full h-full object-cover"
                     controls
                   />

@@ -171,6 +171,20 @@ create table if not exists public.site_settings (
   updated_at timestamptz not null default now()
 );
 
+-- Admin users for authentication
+create table if not exists public.admin_users (
+  id uuid primary key default gen_random_uuid(),
+  username text not null unique,
+  email text not null unique,
+  password_hash text not null,
+  full_name text,
+  role text not null default 'admin' check (role in ('admin', 'super_admin')),
+  is_active boolean not null default true,
+  last_login timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 -- Helpful indexes
 create index if not exists idx_presentations_date on public.presentations (presented_at desc);
 create index if not exists idx_certificates_issue_date on public.certificates (issue_date desc);
@@ -183,5 +197,10 @@ create index if not exists idx_appointments_status_date on public.appointments (
 -- Experiences helpful indexes
 create index if not exists idx_experiences_sort on public.experiences (sort_order asc);
 create index if not exists idx_experiences_physician on public.experiences (physician_id);
+
+-- Admin users helpful indexes
+create index if not exists idx_admin_users_username on public.admin_users (username);
+create index if not exists idx_admin_users_email on public.admin_users (email);
+create index if not exists idx_admin_users_active on public.admin_users (is_active);
 
 

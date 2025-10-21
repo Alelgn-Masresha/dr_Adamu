@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Users, Award, Heart, Stethoscope, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { getUploadsUrl } from '../services/api';
 
 // WebP Image Component with fallback
 const WebPImage = ({ webpSrc, fallbackSrc, alt, className, ...props }: { 
@@ -181,7 +182,7 @@ const Home = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/news/published');
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/news/published`);
         if (response.ok) {
           const data = await response.json();
           // Transform the data to match the expected format
@@ -189,7 +190,7 @@ const Home = () => {
             id: news.id,
             title: news.title,
             description: news.excerpt || news.content?.substring(0, 150) + '...' || 'No description available',
-            image: news.cover_image_file ? `http://localhost:5000/uploads/${news.cover_image_file}` : '/src/img/news/default.jpg',
+            image: news.cover_image_file ? getUploadsUrl(news.cover_image_file) : '/src/img/news/default.jpg',
             date: news.created_at ? new Date(news.created_at).toLocaleDateString('en-US', { 
               year: 'numeric', 
               month: 'long', 
@@ -295,7 +296,7 @@ const Home = () => {
     const fetchExperiences = async () => {
       try {
         setExperiencesLoading(true);
-        const response = await fetch('http://localhost:5000/api/experiences');
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/experiences`);
         if (response.ok) {
           const data = await response.json();
           setExperiences(data);
@@ -318,7 +319,7 @@ const Home = () => {
     const fetchTestimonials = async () => {
       try {
         setTestimonialsLoading(true);
-        const response = await fetch('http://localhost:5000/api/testimonials');
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/testimonials`);
         if (response.ok) {
           const data = await response.json();
           // Filter only approved testimonials and limit to 3 for home page
@@ -356,7 +357,7 @@ const Home = () => {
     const fetchPhysicians = async () => {
       try {
         setPhysiciansLoading(true);
-        const response = await fetch('http://localhost:5000/api/physicians');
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/physicians`);
         if (response.ok) {
           const data = await response.json();
           // Filter only active physicians
@@ -381,7 +382,7 @@ const Home = () => {
     const fetchGalleryItems = async () => {
       try {
         setGalleryLoading(true);
-        const response = await fetch('http://localhost:5000/api/gallery');
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/gallery`);
         if (response.ok) {
           const data = await response.json();
           // Filter only image files
@@ -818,7 +819,7 @@ const Home = () => {
                       <div className="h-[252px] sm:h-[270px] md:h-[288px] relative flex items-center justify-center">
                         {doc.avatar_file ? (
                           <img 
-                            src={`http://localhost:5000/uploads/${doc.avatar_file}`} 
+                            src={getUploadsUrl(doc.avatar_file)} 
                             alt={doc.full_name} 
                             className="w-40 h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 object-cover rounded-full border-4 border-gray" 
                           />
@@ -984,7 +985,7 @@ const Home = () => {
                    <div key={item.id} className="snap-start flex-shrink-0">
                      <div className="w-[240px] sm:w-[280px] md:w-[300px] lg:w-[320px] h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
                        <img 
-                         src={`http://localhost:5000/uploads/${item.file_path}`} 
+                         src={getUploadsUrl(item.file_path)} 
                          alt={item.title} 
                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" 
                          onError={(e) => {
