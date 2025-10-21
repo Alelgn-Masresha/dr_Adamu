@@ -99,7 +99,7 @@ const Footer = () => {
               © 2025 Dr. Habtamu Medium Clinic. All rights reserved.
             </p>
             <p className="text-gray-400 text-sm mt-2 md:mt-0">
-              Powered by Modern Web Technologies
+              Powered by Aurarise Tech Solution
             </p>
           </div>
         </div>

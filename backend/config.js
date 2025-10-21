@@ -5,7 +5,7 @@ module.exports = {
     port: process.env.DB_PORT || 5432,
     database: process.env.DB_NAME || 'db_habtamu',
     user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || '1234'
+    password: process.env.DB_PASSWORD || 'kokeb'
   },
   
   // Server Configuration

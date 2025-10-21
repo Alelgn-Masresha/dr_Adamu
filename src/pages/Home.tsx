@@ -81,6 +81,15 @@ const Home = () => {
   const heroSlides = [
     {
       id: 1,
+      type: 'video',
+      videoSrc: '/src/video/document_6012755297284659991.webm',
+      title: 'Welcome to Dr. Habtamu',
+      subtitle: 'Medium Clinic',
+      description: 'Experience world-class orthopedic and trauma care with our team of dedicated professionals.'
+    },
+    {
+      id: 2,
+      type: 'image',
       webpImage: '/src/img/hero/6015007097554586193.webp',
       fallbackImage: '/src/img/hero/6015007097554586193.jpg',
       title: 'We Care About Your',
@@ -88,23 +97,26 @@ const Home = () => {
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     },
     {
-      id: 2,
+      id: 3,
+      type: 'image',
       webpImage: '/src/img/hero/6015007097554586191.webp',
       fallbackImage: '/src/img/hero/6015007097554586191.jpg',
-      title: 'Empathy Meets',
-      subtitle: 'Expertise',
-      description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
-    },
-    {
-      id: 3,
-      webpImage: '/src/img/hero/6015007097554586187.webp',
-      fallbackImage: '/src/img/hero/6015007097554586187.jpg',
       title: 'Excellence in Every Step of ',
       subtitle: 'Care',
       description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
     },
     {
       id: 4,
+      type: 'image',
+      webpImage: '/src/img/hero/6015007097554586187.webp',
+      fallbackImage: '/src/img/hero/6015007097554586187.jpg',
+      title: 'Empathy Meets',
+      subtitle: 'Expertise',
+      description: 'Our hospital is an international facility with a variety of specialists. We provide high-quality healthcare tailored to meet the unique needs of our patients.'
+    },
+    {
+      id: 5,
+      type: 'image',
       webpImage: '/src/img/hero/6014611982038191001.webp',
       fallbackImage: '/src/img/hero/6014611982038191001.jpg',
       title: 'Compassionate Care, Trusted Professionals',
@@ -153,11 +165,17 @@ const Home = () => {
 
   // Auto-play functionality for hero slider
   useEffect(() => {
+    const currentSlideData = heroSlides[currentSlide];
+    
+    // Set different intervals based on slide type
+    const slideDelay = currentSlideData.type === 'video' ? 10000 : 5000;
+    
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
+    }, slideDelay);
+    
     return () => clearInterval(interval);
-  }, [heroSlides.length]);
+  }, [heroSlides.length, currentSlide]);
 
   // Fetch news data from API
   useEffect(() => {
@@ -194,6 +212,7 @@ const Home = () => {
 
     fetchNews();
   }, []);
+
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
@@ -467,12 +486,23 @@ const Home = () => {
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <WebPImage
-                webpSrc={slide.webpImage}
-                fallbackSrc={slide.fallbackImage}
-                alt={`Hero slide ${slide.id}`}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              {slide.type === 'video' ? (
+                <video
+                  src={slide.videoSrc}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop={true}
+                  playsInline
+                />
+              ) : slide.webpImage && slide.fallbackImage ? (
+                <WebPImage
+                  webpSrc={slide.webpImage!}
+                  fallbackSrc={slide.fallbackImage!}
+                  alt={`Hero slide ${slide.id}`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : null}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-700/60" />
             </div>
           ))}
