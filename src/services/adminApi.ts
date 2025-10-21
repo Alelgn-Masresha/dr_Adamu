@@ -1,9 +1,9 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 // Token management
-const getToken = () => localStorage.getItem('admin_token');
-const setToken = (token) => localStorage.setItem('admin_token', token);
-const removeToken = () => localStorage.removeItem('admin_token');
+const getToken = (): string | null => localStorage.getItem('admin_token');
+const setToken = (token: string): void => localStorage.setItem('admin_token', token);
+const removeToken = (): void => localStorage.removeItem('admin_token');
 
 // Generic API request function with authentication
 const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
