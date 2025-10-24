@@ -1,7 +1,7 @@
 {
-  "name": "damc-backend",
+  "name": "DHMC-backend",
   "version": "1.0.0",
-  "description": "Backend API for DAMC website",
+  "description": "Backend API for DHMC website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -31,6 +31,6 @@
     "api",
     "medical"
   ],
-  "author": "DAMC",
+  "author": "DHMC",
   "license": "MIT"
 }

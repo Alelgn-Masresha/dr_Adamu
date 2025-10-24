@@ -14,7 +14,7 @@ async function createInitialAdmin(query) {
 
     // Default admin credentials
     const username = 'admin';
-    const email = 'admin@damc.com';
+    const email = 'admin@DHMC.com';
     const password = 'admin123'; // Change this in production!
     const fullName = 'System Administrator';
 

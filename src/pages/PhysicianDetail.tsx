@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Search, Calendar, Clock, MapPin, Phone, Mail } from 'lucide-react';
-import { getUploadsUrl } from '../services/api';
+import { getUploadsUrl, physiciansAPI } from '../services/api';
 
 interface Physician {
   id: string;
@@ -34,25 +34,17 @@ const PhysicianDetail = () => {
         
         // Fetch specific physician
         if (id) {
-          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/physicians/${id}`);
-          if (response.ok) {
-            const data = await response.json();
-            setPhysician(data);
-          } else {
-            setError('Physician not found');
-          }
+          const data = await physiciansAPI.getById(id);
+          setPhysician(data);
         }
         
         // Fetch all physicians for "Other Physicians" section
-        const allPhysiciansResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/physicians`);
-        if (allPhysiciansResponse.ok) {
-          const allPhysicians = await allPhysiciansResponse.json();
-          // Filter out current physician and only show active ones
-          const filteredPhysicians = allPhysicians.filter((doc: Physician) => 
-            doc.id !== id && doc.is_active
-          );
-          setOtherPhysicians(filteredPhysicians);
-        }
+        const allPhysicians = await physiciansAPI.getAll();
+        // Filter out current physician and only show active ones
+        const filteredPhysicians = allPhysicians.filter((doc: Physician) => 
+          doc.id !== id && doc.is_active
+        );
+        setOtherPhysicians(filteredPhysicians);
         
       } catch (error) {
         console.error('Error fetching physician data:', error);

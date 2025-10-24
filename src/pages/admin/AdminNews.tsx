@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
-import { newsAPI, getUploadsUrl } from '../../services/adminApi';
+import { newsAPI, getUploadsUrl } from '../../services/api';
 
 const AdminNews = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

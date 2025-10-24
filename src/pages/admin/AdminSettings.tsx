@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Lock, Mail, Save, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
-import { authAPI } from '../../services/adminApi';
+import { authAPI } from '../../services/api';
 
 const AdminSettings = () => {
   const [user, setUser] = useState<any>(null);

@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <div className="bg-blue-600 text-white rounded-full p-2">
-                <span className="text-xl font-bold">DAMC</span>
+                <span className="text-xl font-bold">DHMC</span>
               </div>
               <div>
                 <h3 className="text-xl font-bold">Dr. Habtamu Medium Clinic</h3>

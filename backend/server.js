@@ -47,7 +47,7 @@ app.use('/api/testimonials', testimonialsRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'DAMC Backend API is running',
+    message: 'DHMC Backend API is running',
     timestamp: new Date().toISOString()
   });
 });
@@ -78,8 +78,8 @@ app.use('*', (req, res) => {
 // Start server
 const startServer = async () => {
   try {
-    // Initialize database
-    await initDatabase();
+    // Initialize database - commented out to avoid executing queries on startup
+    // await initDatabase();
     
     // Start listening
     const PORT = config.server.port;

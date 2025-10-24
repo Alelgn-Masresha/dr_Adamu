@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
-import { physiciansAPI, getUploadsUrl } from '../../services/adminApi';
+import { physiciansAPI, getUploadsUrl } from '../../services/api';
 
 const AdminPhysicians = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

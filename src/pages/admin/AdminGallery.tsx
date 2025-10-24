@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
-import { galleryAPI, getUploadsUrl } from '../../services/adminApi';
+import { galleryAPI, getUploadsUrl } from '../../services/api';
 
 const AdminGallery = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,7 +82,7 @@ const AdminGallery = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold text-gray-900">DAMC Gallery</h1>
+        <h1 className="text-2xl font-bold text-gray-900">DHMC Gallery</h1>
         <button 
           onClick={() => setIsModalOpen(true)}
           className="bg-black text-white px-4 py-2 rounded-md text-sm"

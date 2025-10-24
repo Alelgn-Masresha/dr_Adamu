@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { experiencesAPI } from '../services/api';
 
 interface ExperienceItem {
   id: string;
@@ -26,17 +27,11 @@ const Experience = () => {
     const fetchExperiences = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/experiences`);
-        if (response.ok) {
-          const data = await response.json();
-          // Sort by sort_order
-          const sortedExperiences = data.sort((a: ExperienceItem, b: ExperienceItem) => a.sort_order - b.sort_order);
-          setExperiences(sortedExperiences);
-          setError(null);
-        } else {
-          console.error('Failed to fetch experiences');
-          setError('Failed to load experience data');
-        }
+        const data = await experiencesAPI.getAll();
+        // Sort by sort_order
+        const sortedExperiences = data.sort((a: ExperienceItem, b: ExperienceItem) => a.sort_order - b.sort_order);
+        setExperiences(sortedExperiences);
+        setError(null);
       } catch (error) {
         console.error('Error fetching experiences:', error);
         setError('Failed to load experience data');

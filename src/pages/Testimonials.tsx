@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Quote } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { testimonialsAPI } from '../services/api';
 
 interface TestimonialItem {
   id: string;
@@ -21,16 +22,10 @@ const Testimonials = () => {
     const fetchTestimonials = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/testimonials`);
-        if (response.ok) {
-          const data = await response.json();
-          // Filter only approved testimonials
-          const approvedTestimonials = data.filter((testimonial: any) => testimonial.is_approved);
-          setTestimonials(approvedTestimonials);
-        } else {
-          console.error('Failed to fetch testimonials');
-          setTestimonials([]);
-        }
+        const data = await testimonialsAPI.getAll();
+        // Filter only approved testimonials
+        const approvedTestimonials = data.filter((testimonial: any) => testimonial.is_approved);
+        setTestimonials(approvedTestimonials);
       } catch (error) {
         console.error('Error fetching testimonials:', error);
         setTestimonials([]);
@@ -161,7 +156,7 @@ const Testimonials = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-              Why Patients Choose DAMC
+              Why Patients Choose DHMC
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
               The qualities that make our patients recommend us to their family and friends

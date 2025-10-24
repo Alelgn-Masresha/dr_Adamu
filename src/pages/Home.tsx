@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Users, Award, Heart, Stethoscope, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import { getUploadsUrl } from '../services/api';
+import { getUploadsUrl, newsAPI, experiencesAPI, testimonialsAPI, physiciansAPI, galleryAPI } from '../services/api';
 
 // WebP Image Component with fallback
 const WebPImage = ({ webpSrc, fallbackSrc, alt, className, ...props }: { 
@@ -131,35 +131,35 @@ const Home = () => {
       id: 1,
       webpImage: '/src/img/hero/6015007097554586193.webp',
       fallbackImage: '/src/img/hero/6015007097554586193.jpg',
-      title: 'DAMC Expertise',
+      title: 'DHMC Expertise',
       description: 'Advanced orthopedic and trauma care'
     },
     {
       id: 2,
       webpImage: '/src/img/hero/6015007097554586191.webp',
       fallbackImage: '/src/img/hero/6015007097554586191.jpg',
-      title: 'DAMC Innovation',
+      title: 'DHMC Innovation',
       description: 'Cutting-edge medical technology'
     },
     {
       id: 3,
       webpImage: '/src/img/hero/6015007097554586187.webp',
       fallbackImage: '/src/img/hero/6015007097554586187.jpg',
-      title: 'DAMC Excellence',
+      title: 'DHMC Excellence',
       description: 'World-class medical services'
     },
     {
       id: 4,
       webpImage: '/src/img/hero/6014611982038191001.webp',
       fallbackImage: '/src/img/hero/6014611982038191001.jpg',
-      title: 'DAMC Care',
+      title: 'DHMC Care',
       description: 'Compassionate patient care'
     },
     {
       id: 5,
       webpImage: '/src/img/hero/6015007097554586193.webp',
       fallbackImage: '/src/img/hero/6015007097554586193.jpg',
-      title: 'DAMC Quality',
+      title: 'DHMC Quality',
       description: 'Highest standards of care'
     }
   ];
@@ -178,41 +178,34 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [heroSlides.length, currentSlide]);
 
-  // Fetch news data from API
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/news/published`);
-        if (response.ok) {
-          const data = await response.json();
-          // Transform the data to match the expected format
-          const transformedNews = data.map((news: any) => ({
-            id: news.id,
-            title: news.title,
-            description: news.excerpt || news.content?.substring(0, 150) + '...' || 'No description available',
-            image: news.cover_image_file ? getUploadsUrl(news.cover_image_file) : '/src/img/news/default.jpg',
-            date: news.created_at ? new Date(news.created_at).toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            }) : 'No date'
-          }));
-          setNewsItems(transformedNews);
-        } else {
-          console.error('Failed to fetch news');
-          // Fallback to empty array or default news
-          setNewsItems([]);
-        }
-      } catch (error) {
-        console.error('Error fetching news:', error);
-        setNewsItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Fetch news data from API - commented out to avoid queries on startup
+  // useEffect(() => {
+  //   const fetchNews = async () => {
+  //     try {
+  //       const data = await newsAPI.getAll();
+  //       // Transform the data to match the expected format
+  //       const transformedNews = data.map((news: any) => ({
+  //         id: news.id,
+  //         title: news.title,
+  //         description: news.excerpt || news.content?.substring(0, 150) + '...' || 'No description available',
+  //         image: news.cover_image_file ? getUploadsUrl(news.cover_image_file) : '/src/img/news/default.jpg',
+  //         date: news.created_at ? new Date(news.created_at).toLocaleDateString('en-US', { 
+  //           year: 'numeric', 
+  //           month: 'long', 
+  //           day: 'numeric' 
+  //         }) : 'No date'
+  //       }));
+  //       setNewsItems(transformedNews);
+  //     } catch (error) {
+  //       console.error('Error fetching news:', error);
+  //       setNewsItems([]);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchNews();
-  }, []);
+  //   fetchNews();
+  // }, []);
 
 
   const nextSlide = () => {
@@ -291,55 +284,43 @@ const Home = () => {
 
   const stats = calculateStats();
 
-  // Fetch experiences from API
-  useEffect(() => {
-    const fetchExperiences = async () => {
-      try {
-        setExperiencesLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/experiences`);
-        if (response.ok) {
-          const data = await response.json();
-          setExperiences(data);
-        } else {
-          console.error('Failed to fetch experiences');
-          setExperiences([]);
-        }
-      } catch (error) {
-        console.error('Error fetching experiences:', error);
-        setExperiences([]);
-      } finally {
-        setExperiencesLoading(false);
-      }
-    };
-    fetchExperiences();
-  }, []);
+  // Fetch experiences from API - commented out to avoid queries on startup
+  // useEffect(() => {
+  //   const fetchExperiences = async () => {
+  //     try {
+  //       setExperiencesLoading(true);
+  //       const data = await experiencesAPI.getAll();
+  //       setExperiences(data);
+  //     } catch (error) {
+  //       console.error('Error fetching experiences:', error);
+  //       setExperiences([]);
+  //     } finally {
+  //       setExperiencesLoading(false);
+  //     }
+  //   };
+  //   fetchExperiences();
+  // }, []);
 
-  // Fetch testimonials from API
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        setTestimonialsLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/testimonials`);
-        if (response.ok) {
-          const data = await response.json();
-          // Filter only approved testimonials and limit to 3 for home page
-          const approvedTestimonials = data
-            .filter((testimonial: any) => testimonial.is_approved)
-            .slice(0, 3);
-          setTestimonials(approvedTestimonials);
-        } else {
-          console.error('Failed to fetch testimonials');
-          setTestimonials([]);
-        }
-      } catch (error) {
-        console.error('Error fetching testimonials:', error);
-        setTestimonials([]);
-      } finally {
-        setTestimonialsLoading(false);
-      }
-    };
-    fetchTestimonials();
-  }, []);
+  // Fetch testimonials from API - commented out to avoid queries on startup
+  // useEffect(() => {
+  //   const fetchTestimonials = async () => {
+  //     try {
+  //       setTestimonialsLoading(true);
+  //       const data = await testimonialsAPI.getAll();
+  //       // Filter only approved testimonials and limit to 3 for home page
+  //       const approvedTestimonials = data
+  //         .filter((testimonial: any) => testimonial.is_approved)
+  //         .slice(0, 3);
+  //       setTestimonials(approvedTestimonials);
+  //     } catch (error) {
+  //       console.error('Error fetching testimonials:', error);
+  //       setTestimonials([]);
+  //     } finally {
+  //       setTestimonialsLoading(false);
+  //     }
+  //   };
+  //   fetchTestimonials();
+  // }, []);
 
   // Function to convert YouTube URLs to embed URLs
   const getYouTubeEmbedUrl = (url: string) => {
@@ -352,55 +333,43 @@ const Home = () => {
   const cardIndex = currentSlide % heroCards.length;
 
 
-  // Fetch physicians from API
-  useEffect(() => {
-    const fetchPhysicians = async () => {
-      try {
-        setPhysiciansLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/physicians`);
-        if (response.ok) {
-          const data = await response.json();
-          // Filter only active physicians
-          const activePhysicians = data.filter((physician: PhysicianItem) => physician.is_active);
-          setPhysicians(activePhysicians);
-        } else {
-          console.error('Failed to fetch physicians');
-          setPhysicians([]);
-        }
-      } catch (error) {
-        console.error('Error fetching physicians:', error);
-        setPhysicians([]);
-      } finally {
-        setPhysiciansLoading(false);
-      }
-    };
-    fetchPhysicians();
-  }, []);
+  // Fetch physicians from API - commented out to avoid queries on startup
+  // useEffect(() => {
+  //   const fetchPhysicians = async () => {
+  //     try {
+  //       setPhysiciansLoading(true);
+  //       const data = await physiciansAPI.getAll();
+  //       // Filter only active physicians
+  //       const activePhysicians = data.filter((physician: PhysicianItem) => physician.is_active);
+  //       setPhysicians(activePhysicians);
+  //     } catch (error) {
+  //       console.error('Error fetching physicians:', error);
+  //       setPhysicians([]);
+  //     } finally {
+  //       setPhysiciansLoading(false);
+  //     }
+  //   };
+  //   fetchPhysicians();
+  // }, []);
 
-  // Fetch gallery items from API
-  useEffect(() => {
-    const fetchGalleryItems = async () => {
-      try {
-        setGalleryLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/gallery`);
-        if (response.ok) {
-          const data = await response.json();
-          // Filter only image files
-          const imageItems = data.filter((item: any) => item.content_type?.startsWith('image/'));
-          setGalleryItems(imageItems);
-        } else {
-          console.error('Failed to fetch gallery items');
-          setGalleryItems([]);
-        }
-      } catch (error) {
-        console.error('Error fetching gallery items:', error);
-        setGalleryItems([]);
-      } finally {
-        setGalleryLoading(false);
-      }
-    };
-    fetchGalleryItems();
-  }, []);
+  // Fetch gallery items from API - commented out to avoid queries on startup
+  // useEffect(() => {
+  //   const fetchGalleryItems = async () => {
+  //     try {
+  //       setGalleryLoading(true);
+  //       const data = await galleryAPI.getAll();
+  //       // Filter only image files
+  //       const imageItems = data.filter((item: any) => item.content_type?.startsWith('image/'));
+  //       setGalleryItems(imageItems);
+  //     } catch (error) {
+  //       console.error('Error fetching gallery items:', error);
+  //       setGalleryItems([]);
+  //     } finally {
+  //       setGalleryLoading(false);
+  //     }
+  //   };
+  //   fetchGalleryItems();
+  // }, []);
 
 
   // Carousel scroll logic
@@ -873,7 +842,7 @@ const Home = () => {
        {/* News Section */}
        <section className="py-12 sm:py-16 bg-white relative">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-           <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10 px-2">DAMC News</h2>
+           <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10 px-2">DHMC News</h2>
 
            <div className="relative">
              {/* Left Chevron - Hidden on mobile */}
@@ -947,7 +916,7 @@ const Home = () => {
        {/* Gallery Section */}
        <section className="py-12 sm:py-16 bg-gray-50 relative">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-           <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10 px-2">DAMC Gallery</h2>
+           <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10 px-2">DHMC Gallery</h2>
 
            <div className="relative">
              {/* Left Chevron - Hidden on mobile */}

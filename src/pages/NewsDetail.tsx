@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, User, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getUploadsUrl } from '../services/api';
+import { getUploadsUrl, newsAPI } from '../services/api';
 
 interface NewsArticle {
   id: string;
@@ -37,37 +37,28 @@ const NewsDetail = () => {
         
         // Fetch current news article
         if (id) {
-          const currentResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/news/${id}`);
-          if (currentResponse.ok) {
-            const currentData = await currentResponse.json();
-            setCurrentNews(currentData);
-          } else {
-            setError('News article not found');
-            return;
-          }
+          const currentData = await newsAPI.getById(id);
+          setCurrentNews(currentData);
         }
         
         // Fetch other news for sidebar
-        const otherResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/news/published`);
-        if (otherResponse.ok) {
-          const otherData = await otherResponse.json();
-          // Filter out current news and transform data
-          const filteredOtherNews = otherData
-            .filter((news: any) => news.id !== id)
-            .slice(0, 4) // Limit to 4 items
-            .map((news: any) => ({
-              id: news.id,
-              title: news.title,
-              description: news.excerpt || news.content?.substring(0, 100) + '...' || 'No description',
-              image: news.cover_image_file ? getUploadsUrl(news.cover_image_file) : '/src/img/news/default.jpg',
-              date: news.created_at ? new Date(news.created_at).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              }) : 'No date'
-            }));
-          setOtherNews(filteredOtherNews);
-        }
+        const otherData = await newsAPI.getAll();
+        // Filter out current news and transform data
+        const filteredOtherNews = otherData
+          .filter((news: any) => news.id !== id)
+          .slice(0, 4) // Limit to 4 items
+          .map((news: any) => ({
+            id: news.id,
+            title: news.title,
+            description: news.excerpt || news.content?.substring(0, 100) + '...' || 'No description',
+            image: news.cover_image_file ? getUploadsUrl(news.cover_image_file) : '/src/img/news/default.jpg',
+            date: news.created_at ? new Date(news.created_at).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            }) : 'No date'
+          }));
+        setOtherNews(filteredOtherNews);
       } catch (error) {
         console.error('Error fetching news:', error);
         setError('Failed to load news data');
@@ -187,7 +178,7 @@ const NewsDetail = () => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-8">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900">Other DAMC News</h2>
+                <h2 className="text-xl font-bold text-gray-900">Other DHMC News</h2>
                 <button
                   onClick={() => setIsAutoScrolling(!isAutoScrolling)}
                   className="text-gray-500 hover:text-gray-700 transition-colors"

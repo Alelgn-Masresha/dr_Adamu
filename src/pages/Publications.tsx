@@ -1,5 +1,6 @@
 import { BookOpen, FileText, Calendar, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { publicationsAPI } from '../services/api';
 
 interface Publication {
   id: string;
@@ -25,14 +26,8 @@ const Publications = () => {
     const fetchPublications = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/publications`);
-        if (response.ok) {
-          const data = await response.json();
-          setPublications(data);
-        } else {
-          console.error('Failed to fetch publications');
-          setError('Failed to load publications');
-        }
+        const data = await publicationsAPI.getAll();
+        setPublications(data);
       } catch (error) {
         console.error('Error fetching publications:', error);
         setError('Failed to load publications');

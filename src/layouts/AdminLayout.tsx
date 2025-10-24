@@ -1,7 +1,7 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Menu, LayoutGrid, FilePlus2, Image, Newspaper, Users, Briefcase, BookOpenText, LogOut, User, Settings } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { authAPI } from '../services/adminApi';
+import { authAPI } from '../services/api';
 
 const AdminLayout = () => {
   const [open, setOpen] = useState(true);

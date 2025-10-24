@@ -1,11 +1,11 @@
 const axios = require('axios');
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://drhabtamuorthopedics.com/api';
 
 // Test function
 async function testAPI() {
   try {
-    console.log('🧪 Testing DAMC Backend API...\n');
+    console.log('🧪 Testing DHMC Backend API...\n');
 
     // Test health check
     console.log('1. Testing health check...');

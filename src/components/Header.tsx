@@ -51,7 +51,7 @@ const Header = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-4">
               <div className="bg-blue-600 text-white rounded-full p-3 w-16 h-16 flex items-center justify-center">
-                <span className="text-lg font-bold">DAMC</span>
+                <span className="text-lg font-bold">DHMC</span>
               </div>
               <div>
               </div>

@@ -1,6 +1,6 @@
-# DAMC Backend API
+# DHMC Backend API
 
-Express.js backend API for the DAMC (Dr. Adamu Medium Clinic) website with PostgreSQL database.
+Express.js backend API for the DHMC (Dr. Adamu Medium Clinic) website with PostgreSQL database.
 
 ## Features
 

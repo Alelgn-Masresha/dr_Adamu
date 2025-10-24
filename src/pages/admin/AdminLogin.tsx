@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, User, AlertCircle } from 'lucide-react';
-import { authAPI } from '../../services/adminApi';
+import { authAPI } from '../../services/api';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
